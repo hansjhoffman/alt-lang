@@ -1,0 +1,12 @@
+# builds
+.stack-work/
+
+# nix
+.nix-stack
+
+# editors
+.nova
+
+# misc
+.DS_Store
+*~
