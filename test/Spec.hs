@@ -99,3 +99,4 @@ main =
         floatSpec
         stringLiteralSpec
         astSpec
+        booleanSpec
