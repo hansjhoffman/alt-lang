@@ -28,7 +28,6 @@ library
   exposed-modules:
       Lexer
       Parser
-      Syntax
   other-modules:
       Paths_alt
   hs-source-dirs:
@@ -36,6 +35,7 @@ library
   build-depends:
       base >=4.7 && <5
     , megaparsec
+    , parser-combinators
     , text
   default-language: Haskell2010
 
@@ -50,6 +50,7 @@ executable alt-exe
       alt
     , base >=4.7 && <5
     , megaparsec
+    , parser-combinators
     , text
   default-language: Haskell2010
 
@@ -67,5 +68,6 @@ test-suite alt-test
     , hspec
     , hspec-megaparsec
     , megaparsec
+    , parser-combinators
     , text
   default-language: Haskell2010
