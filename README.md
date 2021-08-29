@@ -1,6 +1,6 @@
 # Alt
 
-The safety of Haskell with the feel of Elixir. A reliable language to build web servers that runs on the Erlang BEAM.
+The safety of Haskell, the simplicity of Elm, and tooling/web libraries like Elixir & Phoenix. A reliable language to build web servers that runs on the Erlang BEAM.
 
 # Repl
 
@@ -15,5 +15,8 @@ The safety of Haskell with the feel of Elixir. A reliable language to build web 
 
 N/A
 
-https://www.stephendiehl.com/llvm/#the-lexer
-https://markkarpov.com/tutorial/megaparsec.html
+## Resources
+
+- https://www.stephendiehl.com/llvm/#the-lexer
+- https://markkarpov.com/tutorial/megaparsec.html
+- https://github.com/MondayMorningHaskell/Parsing
