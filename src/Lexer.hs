@@ -14,34 +14,34 @@ type Parser = Parsec Void Text
 
 spaceConsumer :: Parser ()
 spaceConsumer = 
-  L.space space1 (L.skipLineComment "--") (L.skipBlockComment "{-" "-}")
+    L.space space1 (L.skipLineComment "--") (L.skipBlockComment "{-" "-}")
 
 
 lexeme :: Parser a -> Parser a
 lexeme = 
-  L.lexeme spaceConsumer
+    L.lexeme spaceConsumer
 
 
 integer :: Parser Integer
 integer = 
-  lexeme L.decimal
+    lexeme L.decimal
   
 
 signedInteger :: Parser Integer
 signedInteger =
-  L.signed spaceConsumer integer
+    L.signed spaceConsumer integer
 
 
 float :: Parser Double
 float = 
-  lexeme L.float
+    lexeme L.float
   
 
 signedFloat :: Parser Double
 signedFloat =
-  L.signed spaceConsumer float
+    L.signed spaceConsumer float
 
 
 stringLiteral :: Parser String
 stringLiteral =
-  char '\"' *> manyTill L.charLiteral (char '\"')
+    char '\"' *> manyTill L.charLiteral (char '\"')
