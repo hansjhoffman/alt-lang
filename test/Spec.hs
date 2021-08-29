@@ -55,10 +55,10 @@ booleanSpec :: Spec
 booleanSpec =
     describe "Boolean" $ do
         it "should handle value True" $
-            shouldMatch pBoolean "True" (Bool True)
+            shouldMatch pBoolean "True" (Boolean True)
         
         it "should handle value False" $
-            shouldMatch pBoolean "False" (Bool False)
+            shouldMatch pBoolean "False" (Boolean False)
 
 
 astSpec :: Spec

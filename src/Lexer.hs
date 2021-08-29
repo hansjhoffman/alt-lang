@@ -16,7 +16,7 @@ type Parser = Parsec Void Text
 data Expr
     = Var String
     | Int Int
-    | Bool Bool
+    | Boolean Bool
     | Negation    Expr
     | Addition    Expr Expr
     | Subtraction Expr Expr
@@ -82,8 +82,8 @@ comma =
 
 pBoolean :: Parser Expr
 pBoolean =
-    (trueParser >> return (Bool True)) <|> 
-    (falseParser >> return (Bool False))
+    (trueParser >> return (Boolean True)) <|> 
+    (falseParser >> return (Boolean False))
         where
             trueParser = string "True"
             falseParser = string "False"
