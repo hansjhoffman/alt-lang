@@ -15,7 +15,7 @@ import Lexer
 
 shouldMatch :: (Show a, Eq a) => Parser a -> Text -> a -> IO ()
 shouldMatch parser input result =
-    runParser parser "" input `shouldBe` (Right result)
+    runParser parser "" input `shouldBe` Right result
 
 
 -- Tests
@@ -49,6 +49,16 @@ stringLiteralSpec =
     describe "String Literal" $ do
         it "should handle valid strings" $
             shouldMatch stringLiteral "\"hello world\"" "hello world"
+
+
+booleanSpec :: Spec
+booleanSpec =
+    describe "Boolean" $ do
+        it "should handle value True" $
+            shouldMatch pBoolean "True" (Bool True)
+        
+        it "should handle value False" $
+            shouldMatch pBoolean "False" (Bool False)
 
 
 astSpec :: Spec

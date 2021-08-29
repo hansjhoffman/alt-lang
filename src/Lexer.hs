@@ -16,6 +16,7 @@ type Parser = Parsec Void Text
 data Expr
     = Var String
     | Int Int
+    | Bool Bool
     | Negation    Expr
     | Addition    Expr Expr
     | Subtraction Expr Expr
@@ -67,6 +68,25 @@ stringLiteral =
 parens :: Parser a -> Parser a
 parens =
     between (symbol "(") (symbol ")")
+
+
+squareBrackets :: Parser a -> Parser a
+squareBrackets =
+    between (symbol "[") (symbol "]")
+    
+
+comma :: Parser Text
+comma =
+    symbol ","
+    
+
+pBoolean :: Parser Expr
+pBoolean =
+    (trueParser >> return (Bool True)) <|> 
+    (falseParser >> return (Bool False))
+        where
+            trueParser = string "True"
+            falseParser = string "False"
     
 
 pInteger :: Parser Expr
@@ -111,7 +131,7 @@ prefix :: Text -> (Expr -> Expr) -> Operator Parser Expr
 prefix name f =
     Prefix (f <$ symbol name)
     
-    
+
 postfix :: Text -> (Expr -> Expr) -> Operator Parser Expr
 postfix name f =
     Postfix (f <$ symbol name)
