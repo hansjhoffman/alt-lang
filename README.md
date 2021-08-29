@@ -2,6 +2,14 @@
 
 The safety of Haskell with the feel of Elixir. A reliable language to build web servers that runs on the Erlang BEAM.
 
+# Repl
+
+```
+# stack repl
+> :set -XOverloadedStrings
+> parseTest parser "value"
+```
+
 ## Install
 
 N/A
