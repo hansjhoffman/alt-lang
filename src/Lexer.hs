@@ -1,19 +1,32 @@
 module Lexer where
     
 import Text.Parsec.String (Parser)
+import Text.Parsec.Language (emptyDef)
+import qualified Text.Parsec.Token as PT
 
 
-integer :: Parser Integer
-integer = Tok.integer lexer 
+lexer :: PT.TokenParser ()
+lexer = PT.makeTokenParser style
+  where
+    ops = ["+", "*", "-"]
+    names = []
+    style = emptyDef { PT.commentLine = "--"
+                      , PT.reservedOpNames = ops
+                      , PT.reservedNames = names
+                      }
 
 
-float :: Parser Double
-float = Tok.float lexer 
+integerParser :: Parser Integer
+integerParser = PT.integer lexer 
 
 
-identifier :: Parser String
-identifier = Tok.identifier lexer 
+floatParser :: Parser Double
+floatParser = PT.float lexer 
 
 
-parens :: Parser a -> Parser a
-parens = Tok.parens lexer 
+identifierParser :: Parser String
+identifierParser = PT.identifier lexer 
+
+
+parensParser :: Parser a -> Parser a
+parensParser = PT.parens lexer 
