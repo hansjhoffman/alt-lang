@@ -7,6 +7,7 @@ The safety of Haskell with the feel of Elixir. A reliable language to build web 
 ```
 # stack repl
 > :set -XOverloadedStrings
+> import Text.Megaparsec
 > parseTest parser "value"
 ```
 
