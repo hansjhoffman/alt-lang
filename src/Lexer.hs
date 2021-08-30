@@ -3,6 +3,7 @@
 module Lexer where
 
 import Control.Monad.Combinators.Expr
+import Data.Functor
 import Data.Text (Text)
 import Data.Void
 import Text.Megaparsec
@@ -80,13 +81,9 @@ comma =
     symbol ","
     
 
-pBoolean :: Parser Expr
+pBoolean :: Parser Expr          
 pBoolean =
-    (trueParser >> return (Boolean True)) <|> 
-    (falseParser >> return (Boolean False))
-        where
-            trueParser = string "True"
-            falseParser = string "False"
+    (string "True" $> Boolean True) <|> (string "False" $> Boolean False)
     
 
 pInteger :: Parser Expr
