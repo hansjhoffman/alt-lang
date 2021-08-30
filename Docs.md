@@ -16,7 +16,7 @@ Boolean = True | False
 Maybe<A> = Nothing | Just<A>
 Result<E, A> = Error<E> | Ok<A>
 Task<A>
-AsyncTask<E, A> = Task<Result<E, A>>
+Future<E, A> = Task<Result<E, A>>
 ```
 
 ## Arithmetic Operators
@@ -47,8 +47,8 @@ NE -> (!=) :: Boolean
 negation -> not :: Boolean
 and -> and :: Boolean
 or -> or :: Boolean
-
-in and not in ??
+in collection -> in :: Boolean
+not in collection -> not in :: Boolean
 ```
 
 ## Comments
@@ -204,7 +204,7 @@ filePath path =
 Modules are a way to group types and functions together. Each type definition functions automatically become accessible by other modules.
 
 ```
-module HelloWorld where
+module Hello.World where
     @moduledoc """
         Some module documentation. Helps with doc generation.
     """
