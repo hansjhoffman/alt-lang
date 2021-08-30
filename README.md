@@ -1,6 +1,6 @@
 # Alt
 
-The safety of Haskell, the simplicity of Elm, and tooling/web libraries like Elixir & Phoenix. A reliable language to build web servers that runs on the Erlang BEAM.
+The safety of Haskell, the simplicity of Elm, and tooling/web libraries like Elixir & Phoenix. A reliable language for building web servers that run on the Erlang BEAM.
 
 # Repl
 
