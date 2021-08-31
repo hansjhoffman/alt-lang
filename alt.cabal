@@ -28,6 +28,7 @@ library
   exposed-modules:
       Lexer
       Parser
+      Types
   other-modules:
       Paths_alt
   hs-source-dirs:
@@ -58,6 +59,9 @@ test-suite alt-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      LexerSpec
+      ParserSpec
+      TestHelpers
       Paths_alt
   hs-source-dirs:
       test

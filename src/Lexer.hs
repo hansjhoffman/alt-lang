@@ -2,28 +2,13 @@
 
 module Lexer where
 
-import Control.Monad.Combinators.Expr
-import Data.Functor
 import Data.Text (Text)
 import Data.Void
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 
-
-type Parser = Parsec Void Text
-
-
-data Expr
-    = Var String
-    | Int Int
-    | Boolean Bool
-    | Negation    Expr
-    | Addition    Expr Expr
-    | Subtraction Expr Expr
-    | Product     Expr Expr
-    | Division    Expr Expr
-    deriving (Eq, Ord, Show)
+import Types
 
 
 spaceConsumer :: Parser ()
@@ -79,56 +64,3 @@ squareBrackets =
 comma :: Parser Text
 comma =
     symbol ","
-    
-
-pBoolean :: Parser Expr          
-pBoolean =
-    (string "True" $> Boolean True) <|> (string "False" $> Boolean False)
-    
-
-pInteger :: Parser Expr
-pInteger =
-    Int <$> integer
-    
-
-pTerm :: Parser Expr
-pTerm =
-    choice
-        [ parens pExpr
-        , pInteger
-        ]
-
-
-pExpr :: Parser Expr
-pExpr =
-    makeExprParser pTerm operatorTable
-    
-
-operatorTable :: [[Operator Parser Expr]]
-operatorTable =
-    [
-        [ prefix "-" Negation
-        , prefix "+" id
-        ]
-    ,   [ binary "*" Product
-        , binary "/" Division
-        ]
-    ,   [ binary "+" Addition
-        , binary "-" Subtraction
-        ]
-    ]
-
-
-binary :: Text -> (Expr -> Expr -> Expr) -> Operator Parser Expr
-binary name f =
-    InfixL (f <$ symbol name)
-    
-
-prefix :: Text -> (Expr -> Expr) -> Operator Parser Expr
-prefix name f =
-    Prefix (f <$ symbol name)
-    
-
-postfix :: Text -> (Expr -> Expr) -> Operator Parser Expr
-postfix name f =
-    Postfix (f <$ symbol name)
