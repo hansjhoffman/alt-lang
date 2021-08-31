@@ -232,7 +232,7 @@ Spaces (4), not tabs. 2 lines between functions and types. 1 between everything 
 
 ## Frameworks
 
-- Rax -> web framework similar to Elixir's Phoenix
+- Rax -> web framework similar to Elixir's Phoenix, or IHP
 - Something similar to Elixir's Ecto
 - Formatter like Go & Elm
 - CLI tool like Elixir's mix
