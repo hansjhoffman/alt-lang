@@ -13,8 +13,8 @@ import Parser
 -- Tests
 
 
-booleanSpec :: Spec
-booleanSpec =
+pBooleanSpec :: Spec
+pBooleanSpec =
     describe "Boolean" $ do
         it "should handle value True" $
             shouldMatch pBoolean "True" (Boolean True)
@@ -27,11 +27,25 @@ pIntegerSpec :: Spec
 pIntegerSpec =
     describe "Integer AST" $ do
         it "should handle real number" $
-            shouldMatch pInteger "3" (Int 3)
+            shouldMatch pInteger "42" (Int 42)
             
         -- it "should handle real number" $
-        --     shouldMatch pInteger "-3" (Negation (Int 3))
-        
+        --     shouldMatch pInteger "-42" (Negation (Int 42))
+
+
+pFloatSpec :: Spec
+pFloatSpec =
+    describe "Float AST" $ do
+        it "should handle real number" $
+            shouldMatch pFloat "42.0" (Float 42.0)
+            
+        -- it "should handle real number" $
+        --     shouldMatch pFloat "-42.0" (Negation (Float 42.0))
+
+
+pExprSpec :: Spec
+pExprSpec =
+    describe "Expr AST" $ do
         it "should handle simple addition" $
             shouldMatch pExpr "1 + 2" (Addition (Int 1) (Int 2))
             

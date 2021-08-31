@@ -15,6 +15,7 @@ import Types
 data Expr
     = Var String
     | Int Int
+    | Float Double
     | Boolean Bool
     | Negation    Expr
     | Addition    Expr Expr
@@ -32,7 +33,27 @@ pBoolean =
 pInteger :: Parser Expr
 pInteger =
     Int <$> integer
+    
 
+pFloat :: Parser Expr
+pFloat =
+    Float <$> float
+
+
+pLet :: Parser Expr
+pLet =
+    undefined
+    
+
+pIf :: Parser Expr
+pIf =
+    undefined
+    
+
+pLambda :: Parser Expr
+pLambda =
+    undefined
+    
 
 pTerm :: Parser Expr
 pTerm =
