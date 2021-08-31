@@ -11,6 +11,9 @@ import qualified Text.Megaparsec.Char.Lexer as L
 import Types
 
 
+-- Helpers
+
+
 spaceConsumer :: Parser ()
 spaceConsumer = 
     L.space space1 (L.skipLineComment "--") (L.skipBlockComment "{-" "-}")
@@ -24,6 +27,9 @@ lexeme =
 symbol :: Text -> Parser Text
 symbol =
     L.symbol spaceConsumer
+
+
+-- Numbers
 
 
 integer :: Parser Int
@@ -46,11 +52,17 @@ signedFloat =
     L.signed spaceConsumer float
 
 
+-- Strings
+
+
 stringLiteral :: Parser String
 stringLiteral =
     char '\"' *> manyTill L.charLiteral (char '\"')
     
-    
+
+-- Punctuation
+
+
 parens :: Parser a -> Parser a
 parens =
     between (symbol "(") (symbol ")")

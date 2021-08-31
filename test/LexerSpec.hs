@@ -19,9 +19,6 @@ integerSpec =
             
         it "should handle signed integers" $
             shouldMatch signedInteger "-42" (-42)
-      
-        -- it "should handle valid integer with space" $
-        --     shouldMatch integer " 42" 42
     
     
 floatSpec :: Spec
