@@ -29,7 +29,7 @@ symbol =
     L.symbol spaceConsumer
 
 
--- Numbers
+-- Values
 
 
 integer :: Parser Int
@@ -57,7 +57,7 @@ signedFloat =
 
 stringLiteral :: Parser String
 stringLiteral =
-    char '\"' *> manyTill L.charLiteral (char '\"')
+    char '"' *> manyTill L.charLiteral (char '"')
     
 
 -- Punctuation

@@ -27,7 +27,8 @@ data Expr
 
 pBoolean :: Parser Expr          
 pBoolean =
-    (string "True" $> Boolean True) <|> (string "False" $> Boolean False)
+    (string "True" $> Boolean True) <|> 
+    (string "False" $> Boolean False)
 
 
 pInteger :: Parser Expr
