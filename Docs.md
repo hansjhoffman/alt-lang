@@ -167,7 +167,12 @@ looks like this.
 
 ## Type Variants
 
-`type CustomType = Foo | Bar | Baz a`
+```
+type CustomType
+    = Foo 
+    | Bar 
+    | Baz a
+```
 
 ## Let Blocks
 

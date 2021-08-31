@@ -15,6 +15,7 @@ tail xs =
         [_:xs] =>
             tail xs
 
+
 tail' :: [a] -> Maybe a
 tail' xs =
     xs
