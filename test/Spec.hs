@@ -14,9 +14,11 @@ import ParserSpec (pBooleanSpec, pFloatSpec, pExprSpec, pIntegerSpec)
 main :: IO ()
 main = 
     hspec $ do
+        -- Lexer
         integerSpec
         floatSpec
         stringLiteralSpec
+        -- Parser
         pBooleanSpec
         pExprSpec
         pFloatSpec

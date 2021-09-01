@@ -16,7 +16,10 @@ import Types
 
 spaceConsumer :: Parser ()
 spaceConsumer = 
-    L.space space1 (L.skipLineComment "--") (L.skipBlockComment "{-" "-}")
+    L.space space1 lineComment blockComment
+    where
+        lineComment = L.skipLineComment "--"
+        blockComment = L.skipBlockComment "{-" "-}"
 
 
 lexeme :: Parser a -> Parser a
@@ -52,6 +55,21 @@ signedFloat =
     L.signed spaceConsumer float
 
 
+-- binary' :: Parser Integer
+-- binary' =
+--     char '0' >> char 'b' >> L.binary
+
+
+-- octal' :: Parser Integer
+-- octal' =
+--     char '0' >> char 'o' >> L.octal
+
+
+-- hexadecimal' :: Parser Int
+-- hexadecimal' =
+--     char '0' >> char 'x' >> L.hexadecimal
+
+
 -- Strings
 
 
@@ -68,6 +86,11 @@ parens =
     between (symbol "(") (symbol ")")
 
 
+curlyBrackets :: Parser a -> Parser a
+curlyBrackets =
+    between (symbol "{") (symbol "}")
+
+
 squareBrackets :: Parser a -> Parser a
 squareBrackets =
     between (symbol "[") (symbol "]")
@@ -76,3 +99,8 @@ squareBrackets =
 comma :: Parser Text
 comma =
     symbol ","
+
+
+-- commaSep :: Parser a -> Parser [a]
+-- commaSep p =
+--     sepBy p comma
