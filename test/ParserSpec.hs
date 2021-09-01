@@ -10,7 +10,7 @@ import TestHelpers
 import Parser
 
 
--- Tests
+-- Values
 
 
 pBooleanSpec :: Spec
@@ -25,8 +25,8 @@ pBooleanSpec =
 
 pIntegerSpec :: Spec
 pIntegerSpec =
-    describe "Integer AST" $ do
-        it "should handle real number" $
+    describe "Integer" $ do
+        it "should handle a valid integer" $
             shouldMatch pInteger "42" (Int 42)
             
         -- it "should handle real number" $
@@ -35,17 +35,27 @@ pIntegerSpec =
 
 pFloatSpec :: Spec
 pFloatSpec =
-    describe "Float AST" $ do
-        it "should handle real number" $
+    describe "Float" $ do
+        it "should handle a valid float" $
             shouldMatch pFloat "42.0" (Float 42.0)
             
         -- it "should handle real number" $
         --     shouldMatch pFloat "-42.0" (Negation (Float 42.0))
 
 
+pStringSpec :: Spec
+pStringSpec =
+    describe "String" $ do
+        it "should handle a valid string" $
+            shouldMatch pString "\"hello word\"" (String "hello world")
+
+
+-- Expressions
+
+
 pExprSpec :: Spec
 pExprSpec =
-    describe "Expr AST" $ do
+    describe "Expression" $ do
         it "should handle simple addition" $
             shouldMatch pExpr "1 + 2" (Addition (Int 1) (Int 2))
             

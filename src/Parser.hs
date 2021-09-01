@@ -13,7 +13,7 @@ import Types
 
 
 data Expr
-    = Var String
+    = String String
     | Int Int
     | Float Double
     | Boolean Bool
@@ -23,6 +23,9 @@ data Expr
     | Product     Expr Expr
     | Division    Expr Expr
     deriving (Eq, Ord, Show)
+
+
+-- Values
 
 
 pBoolean :: Parser Expr          
@@ -41,6 +44,14 @@ pFloat =
     Float <$> float
 
 
+pString :: Parser Expr
+pString =
+    String <$> stringLiteral
+
+
+-- Statements
+
+
 pLet :: Parser Expr
 pLet =
     undefined
@@ -50,6 +61,9 @@ pIf :: Parser Expr
 pIf =
     undefined
     
+
+-- Expressions
+
 
 pLambda :: Parser Expr
 pLambda =
