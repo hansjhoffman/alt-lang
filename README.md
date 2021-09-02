@@ -20,3 +20,5 @@ N/A
 - https://www.stephendiehl.com/llvm/#the-lexer
 - https://markkarpov.com/tutorial/megaparsec.html
 - https://github.com/MondayMorningHaskell/Parsing
+- https://abhinavsarkar.net/posts/implementing-co-1/
+- https://gilmi.xyz/blog/post/2016/10/14/lisp-to-js
