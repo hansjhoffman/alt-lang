@@ -41,8 +41,10 @@ pString =
 
 pInt :: String -> Parser Expr
 pInt input =
-    let (token, rest) = L.integer input
-    in Int <$> pure 42
+    Parser $
+        \input -> do
+            token <- L.integer input
+            pure (Int token, "")
 
 
 pFloat :: Parser Expr

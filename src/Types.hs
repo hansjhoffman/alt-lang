@@ -4,8 +4,7 @@ import Control.Applicative
 
 
 newtype Parser a = Parser
-    { unParser :: String -> Maybe (a, String)
-    }
+    { runParser :: String -> Maybe (a, String) }
 
 
 -- Functor
@@ -62,8 +61,8 @@ instance Alternative Parser where
     --     undefined
     
     -- applied as many times as possible, but at least once
-    -- many (Parser p) =
-    --     undefined
+    -- many (Parser parser) =
+    --     (:) <$> parser <*> some parser
 
 
 -- Monad
@@ -74,7 +73,7 @@ instance Monad Parser where
         Parser $
             \input -> do
                 (a, rest) <- p input
-                unParser (f a) rest
+                runParser (f a) rest
     
     ma >> mb =
         mb

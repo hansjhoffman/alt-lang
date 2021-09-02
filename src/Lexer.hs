@@ -8,14 +8,21 @@ import Data.Char
 import Types
 
 
-char :: String -> String
-char input =
-    undefined
+data Token
+    = TInt Int
+    deriving (Eq, Show)
 
 
-integer :: String -> (String, String)
+integer :: String -> Maybe Int
 integer input =
-    span isNumber input
+    case lexeme of
+        [] ->
+            Nothing
+            
+        lexeme' ->
+            Just (read lexeme' :: Int)
+    where
+        lexeme = takeWhile isNumber input
 
 
 hexadecimal :: String -> String
@@ -44,15 +51,3 @@ string input =
 -- signed :: Parser a -> Text
 -- signed =
 --     undefined
-
-
--- Skip zero or more white space characters.
-space :: String -> String
-space input =
-    takeWhile isSpace input
-
-
--- Skip one or more white space characters.
-space1 :: String -> String
-space1 input =
-    takeWhile isSpace input
