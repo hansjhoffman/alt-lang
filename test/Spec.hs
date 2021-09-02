@@ -4,8 +4,8 @@ module Main where
     
 import Test.Hspec (hspec)
 
-import LexerSpec (integerSpec, floatSpec, stringLiteralSpec)
-import ParserSpec (pBooleanSpec, pFloatSpec, pExprSpec, pIntegerSpec)
+import LexerSpec
+import ParserSpec
 
 
 -- Main
@@ -18,6 +18,9 @@ main =
         integerSpec
         floatSpec
         stringLiteralSpec
+        binarySpec
+        hexadecimalSpec
+        octalSpec
         -- Parser
         pBooleanSpec
         pExprSpec
