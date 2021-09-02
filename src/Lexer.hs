@@ -1,106 +1,66 @@
-{-# LANGUAGE OverloadedStrings #-}
+module Lexer
+    ( integer
+    )
+    where
 
-module Lexer where
-
-import Data.Text (Text)
-import Data.Void
-import Text.Megaparsec
-import Text.Megaparsec.Char
-import qualified Text.Megaparsec.Char.Lexer as L
+import Data.Char
+import qualified Data.Text as T
 
 import Types
 
 
--- Helpers
+char :: String -> String
+char input =
+    undefined
 
 
-spaceConsumer :: Parser ()
-spaceConsumer = 
-    L.space space1 lineComment blockComment
+-- integer :: Parser Int
+-- integer =
+--     Parser $ \input ->
+--         let (token, rest) = T.span isNumber (T.pack input)
+--         -- in Just (read token :: Int, rest)
+--         -- in Just (rest, read token :: Int)
+--         in _a
+integer :: T.Text -> (T.Text, T.Text)
+integer input =
+    T.span isNumber input
+
+
+hexadecimal :: String -> String
+hexadecimal input =
+    takeWhile isHexDigit input
+
+
+octal :: String -> String
+octal input =
+    takeWhile isOctDigit input
+
+
+binary :: String -> String
+binary input =
+    takeWhile isBinDigit input
     where
-        lineComment = L.skipLineComment "--"
-        blockComment = L.skipBlockComment "{-" "-}"
+        isBinDigit x =
+            x == '0' || x == '1'
 
 
-lexeme :: Parser a -> Parser a
-lexeme = 
-    L.lexeme spaceConsumer
-    
-
-symbol :: Text -> Parser Text
-symbol =
-    L.symbol spaceConsumer
+string :: String -> String
+string input =
+    takeWhile isAlpha input
 
 
--- Values
+-- signed :: Parser a -> Text
+-- signed =
+--     undefined
 
 
-integer :: Parser Int
-integer = 
-    lexeme L.decimal
-  
-
-signedInteger :: Parser Int
-signedInteger =
-    L.signed spaceConsumer integer
+-- Skip zero or more white space characters.
+space :: String -> String
+space input =
+    takeWhile isSpace input
 
 
-float :: Parser Double
-float = 
-    lexeme L.float
-  
-
-signedFloat :: Parser Double
-signedFloat =
-    L.signed spaceConsumer float
-
-
--- binary' :: Parser Integer
--- binary' =
---     char '0' >> char 'b' >> L.binary
-
-
--- octal' :: Parser Integer
--- octal' =
---     char '0' >> char 'o' >> L.octal
-
-
--- hexadecimal' :: Parser Int
--- hexadecimal' =
---     char '0' >> char 'x' >> L.hexadecimal
-
-
--- Strings
-
-
-stringLiteral :: Parser String
-stringLiteral =
-    char '"' *> manyTill L.charLiteral (char '"')
-    
-
--- Punctuation
-
-
-parens :: Parser a -> Parser a
-parens =
-    between (symbol "(") (symbol ")")
-
-
-curlyBrackets :: Parser a -> Parser a
-curlyBrackets =
-    between (symbol "{") (symbol "}")
-
-
-squareBrackets :: Parser a -> Parser a
-squareBrackets =
-    between (symbol "[") (symbol "]")
-    
-
-comma :: Parser Text
-comma =
-    symbol ","
-
-
--- commaSep :: Parser a -> Parser [a]
--- commaSep p =
---     sepBy p comma
+-- Skip one or more white space characters.
+space1 :: String -> String
+space1 input =
+    takeWhile isSpace input

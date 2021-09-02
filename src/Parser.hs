@@ -1,113 +1,67 @@
-{-# LANGUAGE OverloadedStrings #-}
+module Parser 
+    ( Expr(..)
+    , pInt
+    ) where
 
-module Parser where
-  
-import Control.Monad.Combinators.Expr
-import Data.Functor
-import Data.Text (Text)
-import Text.Megaparsec ((<|>), choice)
-import Text.Megaparsec.Char
+import qualified Data.Text as T
 
-import Lexer
+import qualified Lexer as L
 import Types
 
 
 data Expr
-    = String String
+    = Boolean Bool
+    | Chr Char
+    | Str String
     | Int Int
-    | Float Double
-    | Boolean Bool
-    | Negation    Expr
-    | Addition    Expr Expr
-    | Subtraction Expr Expr
-    | Product     Expr Expr
-    | Division    Expr Expr
-    deriving (Eq, Ord, Show)
+    | Float Float
+    | List [Expr]
+    | Negate Expr
+    | Unit
+    deriving (Eq, Show)
 
 
 -- Values
 
 
-pBoolean :: Parser Expr          
+pBoolean :: Parser Expr
 pBoolean =
-    (string "True" $> Boolean True) <|> 
-    (string "False" $> Boolean False)
+    undefined
+    -- (L.string "True" $> Boolean True) <|> 
+    -- (L.string "False" $> Boolean False)
 
 
-pInteger :: Parser Expr
-pInteger =
-    Int <$> integer
-    
-
-pFloat :: Parser Expr
-pFloat =
-    Float <$> float
+pChar :: Parser Expr
+pChar =
+    undefined
 
 
 pString :: Parser Expr
 pString =
-    String <$> stringLiteral
-
-
--- Statements
-
-
-pLet :: Parser Expr
-pLet =
     undefined
-    
 
-pIf :: Parser Expr
-pIf =
+
+pInt :: T.Text -> Parser Expr
+pInt input =
+    let (token, rest ) = L.integer input
+    in Int <$> pure 42
+
+
+pFloat :: Parser Expr
+pFloat =
     undefined
-    
-
--- Expressions
 
 
-pLambda :: Parser Expr
-pLambda =
+pList :: Parser Expr
+pList =
     undefined
-    
-
-pTerm :: Parser Expr
-pTerm =
-    choice
-        [ parens pExpr
-        , pInteger
-        ]
 
 
-pExpr :: Parser Expr
-pExpr =
-    makeExprParser pTerm operatorTable
-    
-
-operatorTable :: [[Operator Parser Expr]]
-operatorTable =
-    [
-        [ prefix "-" Negation
-        , prefix "+" id
-        ]
-    ,   [ binary "*" Product
-        , binary "/" Division
-        ]
-    ,   [ binary "+" Addition
-        , binary "-" Subtraction
-        ]
-    ]
+pNegate :: Parser Expr
+pNegate =
+    undefined
 
 
-binary :: Text -> (Expr -> Expr -> Expr) -> Operator Parser Expr
-binary name f =
-    InfixL (f <$ symbol name)
-    
-
-prefix :: Text -> (Expr -> Expr) -> Operator Parser Expr
-prefix name f =
-    Prefix (f <$ symbol name)
-    
-
-postfix :: Text -> (Expr -> Expr) -> Operator Parser Expr
-postfix name f =
-    Postfix (f <$ symbol name)
+pUnit :: Parser Expr
+pUnit =
+    undefined

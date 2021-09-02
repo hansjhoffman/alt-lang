@@ -35,8 +35,6 @@ library
       src
   build-depends:
       base >=4.7 && <5
-    , megaparsec
-    , parser-combinators
     , text
   default-language: Haskell2010
 
@@ -50,8 +48,6 @@ executable alt-exe
   build-depends:
       alt
     , base >=4.7 && <5
-    , megaparsec
-    , parser-combinators
     , text
   default-language: Haskell2010
 
@@ -59,9 +55,7 @@ test-suite alt-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      LexerSpec
       ParserSpec
-      TestHelpers
       Paths_alt
   hs-source-dirs:
       test
@@ -70,8 +64,6 @@ test-suite alt-test
       alt
     , base >=4.7 && <5
     , hspec
-    , hspec-megaparsec
-    , megaparsec
-    , parser-combinators
+    , quickcheck
     , text
   default-language: Haskell2010
