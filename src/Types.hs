@@ -13,9 +13,10 @@ newtype Parser a = Parser
 
 instance Functor Parser where
     fmap f (Parser p) =
-        Parser $ \input -> do
-            (a, input') <- p input
-            Just (f a, input')
+        Parser $
+            \input -> do
+                (a, rest) <- p input
+                Just (f a, rest)
 
 
 -- Alternative
@@ -23,14 +24,16 @@ instance Functor Parser where
 
 instance Applicative Parser where
     pure p =
-        Parser $ \input -> 
-            Just (p, input)
+        Parser $
+            \input -> 
+                Just (p, input)
     
     (Parser p1) <*> (Parser p2) =
-        Parser $ \input -> do
-            (f, input') <- p1 input
-            (a, input'') <- p2 input'
-            Just (f a, input'')
+        Parser $
+            \input -> do
+                (f, rest) <- p1 input
+                (a, rest') <- p2 rest
+                Just (f a, rest')
 
     p1 *> p2 =
         p2
@@ -44,12 +47,15 @@ instance Applicative Parser where
 
 instance Alternative Parser where
     empty =
-        Parser $ \input ->
-            Nothing
+        Parser $
+            \input ->
+                Nothing
     
     (Parser p1) <|> (Parser p2) =
-        Parser $ \input ->
-            p1 input <|> p2 input
+        Parser $
+            \input ->
+                p1 input <|> 
+                p2 input
     
     -- applied as many times as possible, but allows zero
     -- some (Parser p) =
@@ -64,10 +70,11 @@ instance Alternative Parser where
 
 
 instance Monad Parser where
-    (Parser p) >>= f = do
-        Parser $ \input -> do
-            (a, input') <- p input
-            unParser (f a) input'
+    (Parser p) >>= f =
+        Parser $
+            \input -> do
+                (a, rest) <- p input
+                unParser (f a) rest
     
     ma >> mb =
         mb
