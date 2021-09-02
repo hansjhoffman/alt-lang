@@ -3,8 +3,10 @@
 module Parser where
   
 import Control.Monad.Combinators.Expr
+    ( Operator(..)
+    , makeExprParser
+    )
 import Data.Functor
-import Data.Text (Text)
 import Text.Megaparsec ((<|>), choice)
 import Text.Megaparsec.Char
 
@@ -13,54 +15,124 @@ import Types
 
 
 data Expr
-    = String String
-    | Int Int
-    | Float Double
-    | Boolean Bool
-    | Negation    Expr
-    | Addition    Expr Expr
-    | Subtraction Expr Expr
-    | Product     Expr Expr
-    | Division    Expr Expr
-    deriving (Eq, Ord, Show)
+    = LStr String
+    | LInt Int
+    | LFloat Double
+    | LBool Bool
+    | Var Identifier
+    | Binary BinOp Expr Expr
+    deriving (Eq, Show)
 
 
+type Identifier = String
+
+
+data BinOp
+    = Plus
+    | Minus
+    | Mult
+    | Div
+    | Equals
+    | NotEquals
+    | LessThan
+    | GreaterThan
+    | LessThanEquals
+    | GreaterThanEquals
+    deriving (Eq, Show)
+
+
+data Op
+    = PipeForward
+    | PipeBackward
+    deriving (Eq, Show)
+
+
+data Stmt
+    = ExprStmt Expr
+    | IfStmt Expr [Stmt]
+    deriving (Eq, Show)
+
+
+type Program
+    = [Stmt]
+
+ 
 -- Values
 
 
 pBoolean :: Parser Expr          
 pBoolean =
-    (string "True" $> Boolean True) <|> 
-    (string "False" $> Boolean False)
+    (string "True" $> LBool True) <|> 
+    (string "False" $> LBool False)
 
 
 pInteger :: Parser Expr
 pInteger =
-    Int <$> integer
+    LInt <$> integer
     
 
 pFloat :: Parser Expr
 pFloat =
-    Float <$> float
+    LFloat <$> float
 
 
 pString :: Parser Expr
 pString =
-    String <$> stringLiteral
+    LStr <$> stringLiteral
+
+
+pBinary :: Parser Expr
+pBinary =
+    LInt <$> binary
+
+
+pOctal :: Parser Expr
+pOctal =
+    LInt <$> octal
+
+
+pHexadecimal :: Parser Expr
+pHexadecimal =
+    LInt <$> hexadecimal
+
+
+pValue :: Parser Expr
+pValue =
+    pString <|>
+    pBoolean <|>
+    pInteger <|>
+    pFloat <|>
+    pBinary <|>
+    pOctal <|>
+    pHexadecimal
+
+
+-- Identifier
+
+
+pIdentifier :: Parser Expr
+pIdentifier =
+    Var <$> identifier
 
 
 -- Statements
 
 
-pLet :: Parser Expr
-pLet =
-    undefined
-    
+-- pLetStmt :: Parser Stmt
+-- pLetStmt =
+--     undefined
 
-pIf :: Parser Expr
-pIf =
-    undefined
-    
+
+-- pIfStmt :: Parser Stmt
+-- pIfStmt =
+--     IfStmt <$> (symbol "if" *> pExpr) <*> (symbol "then") <*> (many pStmt) <*> (symbol "else") <*> (many pStmt)
+
+
+-- pStmt :: Parser Stmt
+-- pStmt =
+--     pIfStmt <|>
+--     pLetStmt
+
 
 -- Expressions
 
@@ -74,40 +146,37 @@ pTerm :: Parser Expr
 pTerm =
     choice
         [ parens pExpr
-        , pInteger
+        , pValue
+        , pIdentifier
         ]
 
 
 pExpr :: Parser Expr
 pExpr =
-    makeExprParser pTerm operatorTable
+    makeExprParser pTerm operators
     
 
-operatorTable :: [[Operator Parser Expr]]
-operatorTable =
+operators :: [[Operator Parser Expr]]
+operators =
     [
-        [ prefix "-" Negation
-        , prefix "+" id
+        [ binary Mult $ symbol "*"
+        , binary Div $ symbol "/"
         ]
-    ,   [ binary "*" Product
-        , binary "/" Division
+    ,   [ binary Plus $ symbol "+"
+        , binary Minus $ symbol "-"
         ]
-    ,   [ binary "+" Addition
-        , binary "-" Subtraction
+    ,   [ binary LessThan $ symbol "<"
+        , binary GreaterThan $ symbol ">"
         ]
+    ,   [ binary Equals $ symbol "=="
+        , binary NotEquals $ symbol "!="
+        ]
+    -- ,   [ binary GreaterThanEquals $ symbol ">="
+    --     , binary LessThanEquals $ symbol "<="
+    --     ]
+    -- ,   [ binary PipeForward $ symbol "|>"
+    --     , binary PipeBackward $ symbol "<|"
+    --     ]
     ]
-
-
-binary :: Text -> (Expr -> Expr -> Expr) -> Operator Parser Expr
-binary name f =
-    InfixL (f <$ symbol name)
-    
-
-prefix :: Text -> (Expr -> Expr) -> Operator Parser Expr
-prefix name f =
-    Prefix (f <$ symbol name)
-    
-
-postfix :: Text -> (Expr -> Expr) -> Operator Parser Expr
-postfix name f =
-    Postfix (f <$ symbol name)
+    where
+        binary op symP = InfixL $ Binary op <$ symP

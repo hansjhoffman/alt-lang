@@ -2,7 +2,6 @@
 
 module Lexer where
 
-import Data.Text (Text)
 import Data.Void
 import Text.Megaparsec
 import Text.Megaparsec.Char
@@ -11,11 +10,8 @@ import qualified Text.Megaparsec.Char.Lexer as L
 import Types
 
 
--- Helpers
-
-
-spaceConsumer :: Parser ()
-spaceConsumer = 
+sc :: Parser ()
+sc = 
     L.space space1 lineComment blockComment
     where
         lineComment = L.skipLineComment "--"
@@ -24,12 +20,12 @@ spaceConsumer =
 
 lexeme :: Parser a -> Parser a
 lexeme = 
-    L.lexeme spaceConsumer
+    L.lexeme sc
     
 
-symbol :: Text -> Parser Text
+symbol :: String -> Parser String
 symbol =
-    L.symbol spaceConsumer
+    L.symbol sc
 
 
 -- Values
@@ -37,37 +33,27 @@ symbol =
 
 integer :: Parser Int
 integer = 
-    lexeme L.decimal
-  
-
-signedInteger :: Parser Int
-signedInteger =
-    L.signed spaceConsumer integer
+    lexeme (L.signed sc L.decimal)
 
 
 float :: Parser Double
 float = 
-    lexeme L.float
-  
-
-signedFloat :: Parser Double
-signedFloat =
-    L.signed spaceConsumer float
+    lexeme (L.signed sc L.float)
 
 
--- binary' :: Parser Integer
--- binary' =
---     char '0' >> char 'b' >> L.binary
+binary :: Parser Int
+binary =
+    char '0' >> char 'b' >> L.binary
 
 
--- octal' :: Parser Integer
--- octal' =
---     char '0' >> char 'o' >> L.octal
+octal :: Parser Int
+octal =
+    char '0' >> char 'o' >> L.octal
 
 
--- hexadecimal' :: Parser Int
--- hexadecimal' =
---     char '0' >> char 'x' >> L.hexadecimal
+hexadecimal :: Parser Int
+hexadecimal =
+    char '0' >> char 'x' >> L.hexadecimal
 
 
 -- Strings
@@ -75,7 +61,7 @@ signedFloat =
 
 stringLiteral :: Parser String
 stringLiteral =
-    char '"' *> manyTill L.charLiteral (char '"')
+    char '"' *> manyTill L.charLiteral (char '"') <* sc
     
 
 -- Punctuation
@@ -96,11 +82,14 @@ squareBrackets =
     between (symbol "[") (symbol "]")
     
 
-comma :: Parser Text
+comma :: Parser String
 comma =
     symbol ","
 
 
--- commaSep :: Parser a -> Parser [a]
--- commaSep p =
---     sepBy p comma
+-- Identifier
+
+
+identifier :: Parser String
+identifier =
+    lexeme ((:) <$> letterChar <*> many alphaNumChar)
