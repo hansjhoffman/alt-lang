@@ -13,13 +13,6 @@ char input =
     undefined
 
 
--- integer :: Parser Int
--- integer =
---     Parser $ \input ->
---         let (token, rest) = T.span isNumber (T.pack input)
---         -- in Just (read token :: Int, rest)
---         -- in Just (rest, read token :: Int)
---         in _a
 integer :: String -> (String, String)
 integer input =
     span isNumber input

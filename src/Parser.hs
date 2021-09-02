@@ -41,7 +41,7 @@ pString =
 
 pInt :: String -> Parser Expr
 pInt input =
-    let (token, rest ) = L.integer input
+    let (token, rest) = L.integer input
     in Int <$> pure 42
 
 
