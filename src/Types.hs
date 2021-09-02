@@ -1,12 +1,12 @@
 module Types where
     
 import Control.Applicative
-import qualified Data.Text as T
 
 
 newtype Parser a = Parser
-    { unParser :: T.Text -> Maybe (a, T.Text)
+    { unParser :: String -> Maybe (a, String)
     }
+
 
 -- Functor
 

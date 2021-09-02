@@ -4,7 +4,6 @@ module Lexer
     where
 
 import Data.Char
-import qualified Data.Text as T
 
 import Types
 
@@ -21,9 +20,9 @@ char input =
 --         -- in Just (read token :: Int, rest)
 --         -- in Just (rest, read token :: Int)
 --         in _a
-integer :: T.Text -> (T.Text, T.Text)
+integer :: String -> (String, String)
 integer input =
-    T.span isNumber input
+    span isNumber input
 
 
 hexadecimal :: String -> String

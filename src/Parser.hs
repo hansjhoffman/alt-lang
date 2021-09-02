@@ -3,8 +3,6 @@ module Parser
     , pInt
     ) where
 
-import qualified Data.Text as T
-
 import qualified Lexer as L
 import Types
 
@@ -41,7 +39,7 @@ pString =
     undefined
 
 
-pInt :: T.Text -> Parser Expr
+pInt :: String -> Parser Expr
 pInt input =
     let (token, rest ) = L.integer input
     in Int <$> pure 42
