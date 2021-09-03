@@ -169,8 +169,8 @@ looks like this.
 
 ```
 type CustomType
-    = Foo 
-    | Bar 
+    = Foo
+    | Bar
     | Baz a
 ```
 

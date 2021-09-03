@@ -24,7 +24,7 @@ prettyPrint =
 
 
 runParser :: Parser a -> String -> Either String a
-runParser parser code = do
+runParser parser code =
     case parse parser "" code of
         Left err ->
             Left $ errorBundlePretty err

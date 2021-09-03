@@ -56,19 +56,22 @@ pExprSpec :: Spec
 pExprSpec =
     describe "Expression" $ do
         it "should handle simple addition" $
-            shouldMatch pExpr "1 + 2" (Binary Plus (LInt 1) (LInt 2))
+            shouldMatch pExpr "1 + 2" (Binary Sum (LInt 1) (LInt 2))
             
         it "should handle simple subraction" $
-            shouldMatch pExpr "1 - 2" (Binary Minus (LInt 1) (LInt 2))
+            shouldMatch pExpr "1 - 2" (Binary Difference (LInt 1) (LInt 2))
             
         it "should handle simple division" $
-            shouldMatch pExpr "2 / 4" (Binary Div (LInt 2) (LInt 4))
+            shouldMatch pExpr "2 / 4" (Binary Quotient (LInt 2) (LInt 4))
             
         it "should handle simple multiplication" $
-            shouldMatch pExpr "2 * 4" (Binary Mult (LInt 2) (LInt 4))
+            shouldMatch pExpr "2 * 4" (Binary Product (LInt 2) (LInt 4))
             
         it "should handle parens with addition" $
-            shouldMatch pExpr "(1 + 2) + 3" (Binary Plus (Binary Plus (LInt 1) (LInt 2)) (LInt 3))
+            shouldMatch pExpr "(1 + 2) + 3" (Binary Sum (Binary Sum (LInt 1) (LInt 2)) (LInt 3))
             
         it "should handle multiplication before addtion" $
-            shouldMatch pExpr "1 + 2 * 3" (Binary Plus (LInt 1) (Binary Mult (LInt 2) (LInt 3)))
+            shouldMatch pExpr "1 + 2 * 3" (Binary Sum (LInt 1) (Binary Product (LInt 2) (LInt 3)))
+        
+        it "should handle modulus" $
+            shouldMatch pExpr "16 mod 4" (Binary Modulo (LInt 16) (LInt 4))

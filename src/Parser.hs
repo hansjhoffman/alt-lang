@@ -7,7 +7,7 @@ import Control.Monad.Combinators.Expr
     , makeExprParser
     )
 import Data.Functor
-import Text.Megaparsec ((<|>), choice)
+import Text.Megaparsec ((<|>), choice, eof, many)
 import Text.Megaparsec.Char
 
 import Lexer
@@ -28,10 +28,14 @@ type Identifier = String
 
 
 data BinOp
-    = Plus
-    | Minus
-    | Mult
-    | Div
+    = Sum
+    | Difference
+    | Product
+    | Quotient
+    | Modulo
+    | And
+    | Or
+    | In
     | Equals
     | NotEquals
     | LessThan
@@ -41,7 +45,7 @@ data BinOp
     deriving (Eq, Show)
 
 
-data Op
+data InfixOp
     = PipeForward
     | PipeBackward
     deriving (Eq, Show)
@@ -159,24 +163,37 @@ pExpr =
 operators :: [[Operator Parser Expr]]
 operators =
     [
-        [ binary Mult $ symbol "*"
-        , binary Div $ symbol "/"
+        [ binaryOp Product $ symbol "*"
+        , binaryOp Quotient $ symbol "/"
+        , binaryOp Modulo $ symbol "mod"
         ]
-    ,   [ binary Plus $ symbol "+"
-        , binary Minus $ symbol "-"
+    ,   [ binaryOp Sum $ symbol "+"
+        , binaryOp Difference $ symbol "-"
         ]
-    ,   [ binary LessThan $ symbol "<"
-        , binary GreaterThan $ symbol ">"
+    ,   [ binaryOp LessThan $ symbol "<"
+        , binaryOp GreaterThan $ symbol ">"
         ]
-    ,   [ binary Equals $ symbol "=="
-        , binary NotEquals $ symbol "!="
+    ,   [ binaryOp Equals $ symbol "=="
+        , binaryOp NotEquals $ symbol "!="
+        ]
+    ,   [ binaryOp And $ symbol "and"
+        , binaryOp Or $ symbol "or"
+        , binaryOp In $ symbol "in"
         ]
     -- ,   [ binary GreaterThanEquals $ symbol ">="
     --     , binary LessThanEquals $ symbol "<="
     --     ]
-    -- ,   [ binary PipeForward $ symbol "|>"
-    --     , binary PipeBackward $ symbol "<|"
+    -- ,   [ InfixL $ PipeForward $ symbol "|>"
+    --     , InfixL $ PipeBackward $ symbol "<|"
     --     ]
     ]
     where
-        binary op symP = InfixL $ Binary op <$ symP
+        binaryOp op symP = InfixL $ Binary op <$ symP
+
+
+-- Program
+
+
+pProgram :: Parser [Expr]
+pProgram =
+    sc *> many pTerm <* eof
