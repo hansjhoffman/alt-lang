@@ -155,7 +155,11 @@ operators =
       , binaryOp Modulo $ symbol "mod"
       ]
     , [binaryOp Sum $ symbol "+", binaryOp Difference $ symbol "-"]
-    , [binaryOp LessThan $ symbol "<", binaryOp GreaterThan $ symbol ">"]
+    , [ binaryOp GreaterThanEquals $ symbol ">="
+      , binaryOp LessThanEquals $ symbol "<="
+      , binaryOp LessThan $ symbol "<"
+      , binaryOp GreaterThan $ symbol ">"
+      ]
     , [binaryOp Equals $ symbol "==", binaryOp NotEquals $ symbol "!="]
     , [ binaryOp And $ symbol "and"
       , binaryOp Or $ symbol "or"

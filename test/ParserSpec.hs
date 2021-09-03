@@ -70,3 +70,19 @@ pExprSpec = describe "Expression" $ do
 
     it "should handle modulus"
         $ shouldMatch pExpr "16 mod 4" (Binary Modulo (LInt 16) (LInt 4))
+
+    it "should handle greater than"
+        $ shouldMatch pExpr "4 > 2" (Binary GreaterThan (LInt 4) (LInt 2))
+
+    it "should handle less than"
+        $ shouldMatch pExpr "4 < 2" (Binary LessThan (LInt 4) (LInt 2))
+
+    it "should handle greater than equals" $ shouldMatch
+        pExpr
+        "4 >= 2"
+        (Binary GreaterThanEquals (LInt 4) (LInt 2))
+
+    it "should handle less than equals" $ shouldMatch
+        pExpr
+        "4 <= 2"
+        (Binary LessThanEquals (LInt 4) (LInt 2))
