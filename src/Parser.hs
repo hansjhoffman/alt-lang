@@ -1,17 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Parser where
-  
-import Control.Monad.Combinators.Expr
-    ( Operator(..)
-    , makeExprParser
-    )
-import Data.Functor
-import Text.Megaparsec ((<|>), choice, eof, many)
-import Text.Megaparsec.Char
 
-import Lexer
-import Types
+import           Control.Monad.Combinators.Expr           ( Operator(..)
+                                                          , makeExprParser
+                                                          )
+import           Data.Functor
+import           Text.Megaparsec                          ( (<|>)
+                                                          , choice
+                                                          , eof
+                                                          , many
+                                                          )
+import           Text.Megaparsec.Char
+
+import           Lexer
+import           Types
 
 
 data Expr
@@ -57,129 +60,107 @@ data Stmt
     deriving (Eq, Show)
 
 
-type Program
-    = [Stmt]
+type Program = [Stmt]
 
- 
+
 -- Values
 
 
-pBoolean :: Parser Expr          
-pBoolean =
-    (string "True" $> LBool True) <|> 
-    (string "False" $> LBool False)
+pBoolean :: Parser Expr
+pBoolean = (string "True" $> LBool True) <|> (string "False" $> LBool False)
 
 
 pInteger :: Parser Expr
-pInteger =
-    LInt <$> integer
-    
+pInteger = LInt <$> integer
+
 
 pFloat :: Parser Expr
-pFloat =
-    LFloat <$> float
+pFloat = LFloat <$> float
 
 
 pString :: Parser Expr
-pString =
-    LStr <$> stringLiteral
+pString = LStr <$> stringLiteral
 
 
 pBinary :: Parser Expr
-pBinary =
-    LInt <$> binary
+pBinary = LInt <$> binary
 
 
 pOctal :: Parser Expr
-pOctal =
-    LInt <$> octal
+pOctal = LInt <$> octal
 
 
 pHexadecimal :: Parser Expr
-pHexadecimal =
-    LInt <$> hexadecimal
+pHexadecimal = LInt <$> hexadecimal
 
 
 pValue :: Parser Expr
 pValue =
-    pString <|>
-    pBoolean <|>
-    pInteger <|>
-    pFloat <|>
-    pBinary <|>
-    pOctal <|>
-    pHexadecimal
+    pString
+        <|> pBoolean
+        <|> pInteger
+        <|> pFloat
+        <|> pBinary
+        <|> pOctal
+        <|> pHexadecimal
 
 
 -- Identifier
 
 
 pIdentifier :: Parser Expr
-pIdentifier =
-    Var <$> identifier
+pIdentifier = Var <$> identifier
 
 
 -- Statements
 
 
 -- pLetStmt :: Parser Stmt
--- pLetStmt =
---     undefined
+-- pLetStmt = undefined
 
 
 -- pIfStmt :: Parser Stmt
 -- pIfStmt =
---     IfStmt <$> (symbol "if" *> pExpr) <*> (symbol "then") <*> (many pStmt) <*> (symbol "else") <*> (many pStmt)
+--     IfStmt
+--         <$> (symbol "if" *> pExpr)
+--         <*> (symbol "then")
+--         <*> (many pStmt)
+--         <*> (symbol "else")
+--         <*> (many pStmt)
 
 
 -- pStmt :: Parser Stmt
--- pStmt =
---     pIfStmt <|>
---     pLetStmt
+-- pStmt = pIfStmt <|> pLetStmt
 
 
 -- Expressions
 
 
 pLambda :: Parser Expr
-pLambda =
-    undefined
-    
+pLambda = undefined
+
 
 pTerm :: Parser Expr
-pTerm =
-    choice
-        [ parens pExpr
-        , pValue
-        , pIdentifier
-        ]
+pTerm = choice [parens pExpr, pValue, pIdentifier]
 
 
 pExpr :: Parser Expr
-pExpr =
-    makeExprParser pTerm operators
-    
+pExpr = makeExprParser pTerm operators
+
 
 operators :: [[Operator Parser Expr]]
 operators =
-    [
-        [ binaryOp Product $ symbol "*"
-        , binaryOp Quotient $ symbol "/"
-        , binaryOp Modulo $ symbol "mod"
-        ]
-    ,   [ binaryOp Sum $ symbol "+"
-        , binaryOp Difference $ symbol "-"
-        ]
-    ,   [ binaryOp LessThan $ symbol "<"
-        , binaryOp GreaterThan $ symbol ">"
-        ]
-    ,   [ binaryOp Equals $ symbol "=="
-        , binaryOp NotEquals $ symbol "!="
-        ]
-    ,   [ binaryOp And $ symbol "and"
-        , binaryOp Or $ symbol "or"
-        , binaryOp In $ symbol "in"
-        ]
+    [ [ binaryOp Product $ symbol "*"
+      , binaryOp Quotient $ symbol "/"
+      , binaryOp Modulo $ symbol "mod"
+      ]
+    , [binaryOp Sum $ symbol "+", binaryOp Difference $ symbol "-"]
+    , [binaryOp LessThan $ symbol "<", binaryOp GreaterThan $ symbol ">"]
+    , [binaryOp Equals $ symbol "==", binaryOp NotEquals $ symbol "!="]
+    , [ binaryOp And $ symbol "and"
+      , binaryOp Or $ symbol "or"
+      , binaryOp In $ symbol "in"
+      ]
     -- ,   [ binary GreaterThanEquals $ symbol ">="
     --     , binary LessThanEquals $ symbol "<="
     --     ]
@@ -187,13 +168,15 @@ operators =
     --     , InfixL $ PipeBackward $ symbol "<|"
     --     ]
     ]
-    where
-        binaryOp op symP = InfixL $ Binary op <$ symP
+    where binaryOp op symP = InfixL $ Binary op <$ symP
+
+
+-- infixOp =
+--     symbol "|>" _a
 
 
 -- Program
 
 
 pProgram :: Parser [Expr]
-pProgram =
-    sc *> many pTerm <* eof
+pProgram = sc *> many pTerm <* eof

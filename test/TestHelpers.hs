@@ -1,9 +1,9 @@
 module TestHelpers where
-    
-import Test.Hspec
-import Text.Megaparsec (runParser)
 
-import Types
+import           Test.Hspec
+import           Text.Megaparsec                          ( runParser )
+
+import           Types
 
 
 -- Helpers
