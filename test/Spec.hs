@@ -25,3 +25,4 @@ main = hspec $ do
     pExprSpec
     pFloatSpec
     pIntegerSpec
+    -- pCollectionSpec

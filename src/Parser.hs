@@ -10,6 +10,7 @@ import           Text.Megaparsec                          ( (<|>)
                                                           , choice
                                                           , eof
                                                           , many
+                                                          , sepBy
                                                           )
 import           Text.Megaparsec.Char
 
@@ -22,6 +23,7 @@ data Expr
     | LInt Int
     | LFloat Double
     | LBool Bool
+    | LUnit
     | Var Identifier
     | Binary BinOp Expr Expr
     deriving (Eq, Show)
@@ -48,15 +50,15 @@ data BinOp
     deriving (Eq, Show)
 
 
-data InfixOp
-    = PipeForward
-    | PipeBackward
-    deriving (Eq, Show)
-
-
 data Stmt
     = ExprStmt Expr
     | IfStmt Expr [Stmt]
+    deriving (Eq, Show)
+
+
+data Collection
+    = CList [Expr]
+    | CTuple [Expr]
     deriving (Eq, Show)
 
 
@@ -94,12 +96,16 @@ pHexadecimal :: Parser Expr
 pHexadecimal = LInt <$> hexadecimal
 
 
+pUnit :: Parser Expr
+pUnit = symbol "(" *> symbol ")" $> LUnit
+
+
 pValue :: Parser Expr
 pValue =
     pString
         <|> pBoolean
-        <|> pInteger
         <|> pFloat
+        <|> pInteger
         <|> pBinary
         <|> pOctal
         <|> pHexadecimal
@@ -131,6 +137,21 @@ pIdentifier = Var <$> identifier
 
 -- pStmt :: Parser Stmt
 -- pStmt = pIfStmt <|> pLetStmt
+
+
+-- Collections
+
+
+pList :: Parser Collection
+pList = CList <$> squareBrackets (sepBy pValue comma)
+
+
+pTuple :: Parser Collection
+pTuple = CTuple <$> parens (sepBy pValue comma)
+
+
+pCollection :: Parser Collection
+pCollection = pList <|> pTuple
 
 
 -- Expressions
@@ -165,18 +186,8 @@ operators =
       , binaryOp Or $ symbol "or"
       , binaryOp In $ symbol "in"
       ]
-    -- ,   [ binary GreaterThanEquals $ symbol ">="
-    --     , binary LessThanEquals $ symbol "<="
-    --     ]
-    -- ,   [ InfixL $ PipeForward $ symbol "|>"
-    --     , InfixL $ PipeBackward $ symbol "<|"
-    --     ]
     ]
     where binaryOp op symP = InfixL $ Binary op <$ symP
-
-
--- infixOp =
---     symbol "|>" _a
 
 
 -- Program

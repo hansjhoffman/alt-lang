@@ -41,6 +41,18 @@ pStringSpec = describe "String" $ do
         $ shouldMatch pString "\"hello word\"" (LStr "hello world")
 
 
+pCollectionSpec :: Spec
+pCollectionSpec = describe "Collection" $ do
+    it "should handle a valid list of integers"
+        $ shouldMatch pList "[1,2,3]" ( CList [ LInt 1, LInt 2, LInt 3 ] )
+    
+    it "should handle a valid list of floats"
+        $ shouldMatch pList "[1.0,2.0]" ( CList [ LFloat 1.0, LFloat 2.0 ] )
+    
+    it "should handle a valid list of strings"
+        $ shouldMatch pList "[\"hello\",\"world\"]" ( CList [ LStr "hello", LStr "world" ] )
+
+
 -- Expressions
 
 
