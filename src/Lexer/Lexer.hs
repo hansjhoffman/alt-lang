@@ -1,12 +1,12 @@
 module Lexer.Lexer where
 
 import           Control.Applicative
-import           Data.Text                     as T
+import qualified Data.Text                     as T
 
 
 data LexerError
     = Unexpected Char
-    | UnexpectedEOF
+    | GotEOF
     deriving (Eq, Show)
 
 
@@ -25,6 +25,8 @@ data Token
     | OpenBracket -- `[`
     | CloseBracket -- `]`
     | DoubleColon -- `::`
+    | PipeForward -- `|>`
+    | PipeBackward -- `<|`
     | Dot -- `.`
     | ThinArrow -- `->`
     | FatArrow -- `=>`
@@ -44,6 +46,8 @@ data Token
     | IntLit Int
     -- A Float literal
     | FloatLit Float
+    -- A Char literal
+    | CharLit Char
     -- A Bool literal
     | BoolLit Bool
     -- A String literal
@@ -64,7 +68,7 @@ lexer _ = undefined
 
 unexpected :: T.Text -> LexerError
 unexpected input = case T.unpack input of
-    []      -> UnexpectedEOF
+    []      -> GotEOF
     (c : _) -> Unexpected c
 
 
