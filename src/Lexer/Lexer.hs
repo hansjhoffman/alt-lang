@@ -63,7 +63,7 @@ newtype Lexer a = Lexer { runLexer :: T.Text -> Either LexerError (a, T.Text) }
 
 
 lexer :: T.Text -> Either LexerError [Token]
-lexer _ = undefined
+lexer _ = Left GotEOF
 
 
 unexpected :: T.Text -> LexerError
@@ -83,8 +83,60 @@ char :: Char -> Lexer Char
 char c = satisfy (== c)
 
 
+string :: T.Text -> Lexer T.Text
+string _ = undefined
+
+
 oneOf :: [f a] -> f a
 oneOf = undefined
+
+
+keyword :: Lexer (Token, T.Text)
+keyword = undefined
+
+
+operator :: Lexer (Token, T.Text)
+operator = undefined
+
+
+intLit :: Lexer (Token, T.Text)
+intLit = undefined
+
+
+floatLit :: Lexer (Token, T.Text)
+floatLit = undefined
+
+
+boolLit :: Lexer (Token, T.Text)
+boolLit = undefined
+
+
+stringLit :: Lexer (Token, T.Text)
+stringLit = undefined
+
+
+literal :: Lexer (Token, T.Text)
+literal = intLit <|> floatLit <|> boolLit <|> stringLit
+
+
+typeName :: Lexer (Token, T.Text)
+typeName = undefined
+
+
+upperName :: Lexer (Token, T.Text)
+upperName = undefined
+
+
+lowerName :: Lexer (Token, T.Text)
+lowerName = undefined
+
+
+name :: Lexer (Token, T.Text)
+name = typeName <|> upperName <|> lowerName
+
+
+token :: Lexer (Token, T.Text)
+token = keyword <|> operator <|> literal <|> name
 
 
 -- Instances
