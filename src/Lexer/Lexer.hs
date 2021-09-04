@@ -80,11 +80,11 @@ satisfy predicate = do
 
 
 char :: Char -> Lexer Char
-char c = satisfy (== c)
+char = undefined
 
 
-string :: T.Text -> Lexer T.Text
-string _ = undefined
+string :: Lexer T.Text
+string = undefined
 
 
 oneOf :: [f a] -> f a
