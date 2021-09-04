@@ -21,9 +21,8 @@ description: Please see the README on GitHub at <https://github.com/hansjhoffman
 
 dependencies:
   - base >= 4.7 && < 5
-  - megaparsec
-  - parser-combinators
   - pretty-simple
+  - text
 
 library:
   source-dirs: src
@@ -50,4 +49,3 @@ tests:
     dependencies:
       - alt
       - hspec
-      - hspec-megaparsec
