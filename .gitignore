@@ -1,2 +1,16 @@
-.stack-work/
+# builds
+.stack-work
+
+# nova
+.nix-stack
+
+# editors
+.nova
+.vscode
+
+# env
+.envrc
+
+# misc
+.DS_Store
 *~

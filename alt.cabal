@@ -6,22 +6,21 @@ cabal-version: 1.12
 
 name:           alt
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/hansjhoffman/alt#readme>
-homepage:       https://github.com/hansjhoffman/alt#readme
-bug-reports:    https://github.com/hansjhoffman/alt/issues
+description:    Please see the README on GitHub at <https://github.com/hansjhoffman/alt-lang#readme>
+homepage:       https://github.com/hansjhoffman/alt-lang#readme
+bug-reports:    https://github.com/hansjhoffman/alt-lang/issues
 author:         Hans Hoffman
-maintainer:     example@example.com
+maintainer:     @hansjhoffman
 copyright:      2022 Hans Hoffman
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
 
 source-repository head
   type: git
-  location: https://github.com/hansjhoffman/alt
+  location: https://github.com/hansjhoffman/alt-lang
 
 library
   exposed-modules:
