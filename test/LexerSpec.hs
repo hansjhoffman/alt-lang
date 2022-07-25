@@ -12,9 +12,9 @@ import           Text.Megaparsec                ( runParser )
 
 spec :: Spec
 spec = do
-  describe "integer" $ do
+  describe "integer literal" $ do
     it "should handle valid integer" $ do
-      let result = runParser integer "" "42"
+      let result = runParser integerLiteral "" "42"
       result `shouldBe` Right 42
 
     it "should handle valid signed integer" $ do
@@ -22,9 +22,9 @@ spec = do
       result `shouldBe` Right (-42)
 
 
-  describe "float" $ do
+  describe "float literal" $ do
     it "should handle valid float" $ do
-      let result = runParser float "" "42.0"
+      let result = runParser floatLiteral "" "42.0"
       result `shouldBe` Right 42.0
 
     it "should handle valid signed float" $ do
@@ -38,20 +38,19 @@ spec = do
       result `shouldBe` Right "foo bar"
 
 
-  describe "binary" $ do
+  describe "binary literal" $ do
     it "should handle valid binary" $ do
-      let result = runParser binary "" "0b101010111100000100100011"
+      let result = runParser binaryLiteral "" "0b101010111100000100100011"
       result `shouldBe` Right 11256099
 
 
-  describe "octal" $ do
+  describe "octal literal" $ do
     it "should handle valid octal" $ do
-      let result = runParser octal "" "0o52740443"
+      let result = runParser octalLiteral "" "0o52740443"
       result `shouldBe` Right 11256099
 
 
-  describe "hexadecimal" $ do
+  describe "hexadecimal literal" $ do
     it "should handle valid hexadecimal" $ do
-      let result = runParser hexadecimal "" "0xABC123"
+      let result = runParser hexadecimalLiteral "" "0xABC123"
       result `shouldBe` Right 11256099
-

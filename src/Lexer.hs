@@ -13,11 +13,21 @@ import qualified Text.Megaparsec.Char.Lexer    as L
 import           Types
 
 
+lineComment :: Parser ()
+lineComment = L.skipLineComment "--"
+
+
+blockComment :: Parser ()
+blockComment = L.skipBlockComment "{-" "-}"
+
+
 sc :: Parser ()
 sc = L.space space1 lineComment blockComment
- where
-  lineComment  = L.skipLineComment "--"
-  blockComment = L.skipBlockComment "{-" "-}"
+-- sc = L.space (void $ some (char ' ' <|> char '\t')) lineComment blockComment
+
+
+-- scn :: Parser ()
+-- scn = L.space space1 lineComment blockComment
 
 
 lexeme :: Parser a -> Parser a
@@ -28,33 +38,33 @@ symbol :: Text -> Parser Text
 symbol = L.symbol sc
 
 
-integer :: Parser Integer
-integer = lexeme L.decimal
+integerLiteral :: Parser Integer
+integerLiteral = lexeme L.decimal
 
 
 signedInteger :: Parser Integer
-signedInteger = L.signed sc integer
+signedInteger = L.signed sc integerLiteral
 
 
-float :: Parser Double
-float = lexeme L.float
+floatLiteral :: Parser Double
+floatLiteral = lexeme L.float
 
 
 signedFloat :: Parser Double
-signedFloat = L.signed sc float
+signedFloat = L.signed sc floatLiteral
 
 
 stringLiteral :: Parser String
-stringLiteral = char '\"' *> manyTill L.charLiteral (char '\"')
+stringLiteral = char '"' *> manyTill L.charLiteral (char '"')
 
 
-binary :: Parser Integer
-binary = char '0' >> char 'b' >> L.binary
+binaryLiteral :: Parser Integer
+binaryLiteral = char '0' >> char 'b' >> L.binary
 
 
-octal :: Parser Integer
-octal = char '0' >> char 'o' >> L.octal
+octalLiteral :: Parser Integer
+octalLiteral = char '0' >> char 'o' >> L.octal
 
 
-hexadecimal :: Parser Integer
-hexadecimal = char '0' >> char 'x' >> L.hexadecimal
+hexadecimalLiteral :: Parser Integer
+hexadecimalLiteral = char '0' >> char 'x' >> L.hexadecimal
