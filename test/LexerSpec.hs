@@ -3,9 +3,7 @@ module LexerSpec
   ) where
 
 import           Lexer
-import           Prelude                        ( ($)
-                                                , Either(..)
-                                                )
+import           RIO
 import           Test.Hspec
 import           Text.Megaparsec                ( runParser )
 

@@ -1,7 +1,7 @@
 module Types where
 
-import           Data.Text                      ( Text )
 import           Data.Void                      ( Void )
+import           RIO.Text                       ( Text )
 import           Text.Megaparsec                ( Parsec )
 
 

@@ -3,9 +3,7 @@ module ParserSpec
   ) where
 
 import           Parser
-import           Prelude                        ( ($)
-                                                , Either(..)
-                                                )
+import           RIO
 import           Test.Hspec
 import           Text.Megaparsec                ( runParser )
 

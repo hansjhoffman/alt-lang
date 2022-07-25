@@ -1,12 +1,6 @@
 module Lexer where
 
-import           Control.Applicative            ( (*>) )
-import           Control.Monad                  ( (>>) )
-import           Data.Text                      ( Text )
-import           Prelude                        ( Double
-                                                , Integer
-                                                , String
-                                                )
+import           RIO
 import           Text.Megaparsec
 import           Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer    as L

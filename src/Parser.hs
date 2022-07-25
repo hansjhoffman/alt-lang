@@ -1,19 +1,10 @@
 module Parser where
 
-import           Control.Applicative            ( (<$>) )
 import           Control.Monad.Combinators.Expr ( Operator(..)
                                                 , makeExprParser
                                                 )
-import           Data.Text                      ( Text )
 import           Lexer
-import           Prelude                        ( (<$)
-                                                , Double
-                                                , Eq
-                                                , Integer
-                                                , Show
-                                                , String
-                                                , id
-                                                )
+import           RIO
 import           Text.Megaparsec
 import           Types
 
