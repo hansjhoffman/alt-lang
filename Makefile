@@ -59,4 +59,4 @@ run: ## Run project
 
 .PHONY: test
 test: ## Test code
-	stack test --coverage
+	stack test

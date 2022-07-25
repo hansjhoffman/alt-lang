@@ -1,7 +1,9 @@
 module Main where
 
-import           Lib
+import           Prelude                        ( IO
+                                                , undefined
+                                                )
 
 
 main :: IO ()
-main = someFunc
+main = undefined
