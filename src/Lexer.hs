@@ -36,16 +36,8 @@ integerLiteral :: Parser Integer
 integerLiteral = lexeme L.decimal
 
 
-signedInteger :: Parser Integer
-signedInteger = L.signed sc integerLiteral
-
-
 floatLiteral :: Parser Double
 floatLiteral = lexeme L.float
-
-
-signedFloat :: Parser Double
-signedFloat = L.signed sc floatLiteral
 
 
 stringLiteral :: Parser String

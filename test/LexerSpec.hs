@@ -5,50 +5,37 @@ module LexerSpec
 import           Lexer
 import           RIO
 import           Test.Hspec
-import           Text.Megaparsec                ( runParser )
+import           Test.Hspec.Megaparsec
+import           Text.Megaparsec                ( parse )
 
 
 spec :: Spec
 spec = do
   describe "integer literal" $ do
     it "should handle valid integer" $ do
-      let result = runParser integerLiteral "" "42"
-      result `shouldBe` Right 42
-
-    it "should handle valid signed integer" $ do
-      let result = runParser signedInteger "" "-42"
-      result `shouldBe` Right (-42)
+      parse integerLiteral "" "42" `shouldParse` 42
 
 
   describe "float literal" $ do
     it "should handle valid float" $ do
-      let result = runParser floatLiteral "" "42.0"
-      result `shouldBe` Right 42.0
-
-    it "should handle valid signed float" $ do
-      let result = runParser signedFloat "" "-42.0"
-      result `shouldBe` Right (-42.0)
+      parse floatLiteral "" "42.0" `shouldParse` 42.0
 
 
   describe "string literal" $ do
     it "should handle valid string" $ do
-      let result = runParser stringLiteral "" "\"foo bar\""
-      result `shouldBe` Right "foo bar"
+      parse stringLiteral "" "\"foo bar\"" `shouldParse` "foo bar"
 
 
   describe "binary literal" $ do
     it "should handle valid binary" $ do
-      let result = runParser binaryLiteral "" "0b101010111100000100100011"
-      result `shouldBe` Right 11256099
+      parse binaryLiteral "" "0b101010111100000100100011" `shouldParse` 11256099
 
 
   describe "octal literal" $ do
     it "should handle valid octal" $ do
-      let result = runParser octalLiteral "" "0o52740443"
-      result `shouldBe` Right 11256099
+      parse octalLiteral "" "0o52740443" `shouldParse` 11256099
 
 
   describe "hexadecimal literal" $ do
     it "should handle valid hexadecimal" $ do
-      let result = runParser hexadecimalLiteral "" "0xABC123"
-      result `shouldBe` Right 11256099
+      parse hexadecimalLiteral "" "0xABC123" `shouldParse` 11256099

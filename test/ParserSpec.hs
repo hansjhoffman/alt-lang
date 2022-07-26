@@ -5,44 +5,71 @@ module ParserSpec
 import           Parser
 import           RIO
 import           Test.Hspec
-import           Text.Megaparsec                ( runParser )
+import           Test.Hspec.Megaparsec
+import           Text.Megaparsec                ( parse )
 
 
 spec :: Spec
 spec = do
   describe "integer literal" $ do
     it "should handle valid integer" $ do
-      let result = runParser pInteger "" "42"
-      result `shouldBe` Right (IntLiteral 42)
-
-    -- it "should handle valid signed integer" $ do
-    --   let result = runParser pInteger "" "-42"
-    --   result `shouldBe` Right (IntLiteral (-42))
+      parse pInteger "" "42" `shouldParse` IntLiteral 42
 
     it "should handle valid binary" $ do
-      let result = runParser pBinary "" "0b101010111100000100100011"
-      result `shouldBe` Right (IntLiteral 11256099)
+      parse pBinary "" "0b101010111100000100100011" `shouldParse` IntLiteral 11256099
 
     it "should handle valid hexadecimal" $ do
-      let result = runParser pHexadecimal "" "0xABC123"
-      result `shouldBe` Right (IntLiteral 11256099)
+      parse pHexadecimal "" "0xABC123" `shouldParse` IntLiteral 11256099
 
     it "should handle valid octal" $ do
-      let result = runParser pOctal "" "0o52740443"
-      result `shouldBe` Right (IntLiteral 11256099)
+      parse pOctal "" "0o52740443" `shouldParse` IntLiteral 11256099
 
 
   describe "float literal" $ do
     it "should handle valid float" $ do
-      let result = runParser pFloat "" "42.0"
-      result `shouldBe` Right (FloatLiteral 42.0)
-
-    -- it "should handle valid signed float" $ do
-    --   let result = runParser pFloat "" "-42"
-    --   result `shouldBe` Right (FloatLiteral 42.0)
+      parse pFloat "" "42.0" `shouldParse` FloatLiteral 42.0
 
 
   describe "string literal" $ do
     it "should handle valid string" $ do
-      let result = runParser pString "" "\"foo bar\""
-      result `shouldBe` Right (StringLiteral "foo bar")
+      parse pString "" "\"foo bar\"" `shouldParse` StringLiteral "foo bar"
+
+
+  describe "negation" $ do
+    it "should handle integer negation" $ do
+      parse pExpr "" "-42" `shouldParse` Negation (IntLiteral 42)
+
+    -- it "should handle float negation" $ do
+    --   parse pExpr "" "-42.0" `shouldParse` Negation (FloatLiteral 42.0)
+
+
+  describe "sum" $ do
+    it "should handle integer addition" $ do
+      parse pExpr "" "42 + 42" `shouldParse` Sum (IntLiteral 42) (IntLiteral 42)
+
+    -- it "should handle float addition" $ do
+    --   parse pExpr "" "42.0 + 42.0" `shouldParse` Sum (FloatLiteral 42.0) (FloatLiteral 42.0)
+
+
+  describe "subtact" $ do
+    it "should handle integer subtraction" $ do
+      parse pExpr "" "42 - 42" `shouldParse` Subtract (IntLiteral 42) (IntLiteral 42)
+
+    -- it "should handle float subtraction" $ do
+    --   parse pExpr "" "42.0 - 42.0" `shouldParse` Subtract (FloatLiteral 42.0) (FloatLiteral 42.0)
+
+
+  describe "product" $ do
+    it "should handle integer multiplication" $ do
+      parse pExpr "" "42 * 42" `shouldParse` Product (IntLiteral 42) (IntLiteral 42)
+
+    -- it "should handle float multiplication" $ do
+    --   parse pExpr "" "42.0 * 42.0" `shouldParse` Product (FloatLiteral 42.0) (FloatLiteral 42.0)
+
+
+  describe "division" $ do
+    it "should handle integer division" $ do
+      parse pExpr "" "42 / 42" `shouldParse` Division (IntLiteral 42) (IntLiteral 42)
+
+    -- it "should handle float division" $ do
+    --   parse pExpr "" "42.0 / 42.0" `shouldParse` Division (FloatLiteral 42.0) (FloatLiteral 42.0)

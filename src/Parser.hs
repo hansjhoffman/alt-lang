@@ -61,7 +61,7 @@ pString = StringLiteral <$> stringLiteral
 
 
 pTerm :: Parser Expr
-pTerm = choice [parens pExpr, pInteger, pBinary, pHexadecimal, pOctal, pFloat, pString]
+pTerm = choice [parens pExpr, pString, pInteger, pBinary, pHexadecimal, pOctal, pFloat]
 
 
 pExpr :: Parser Expr
