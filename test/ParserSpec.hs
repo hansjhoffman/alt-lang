@@ -37,7 +37,7 @@ spec = do
 
   describe "negation" $ do
     it "should handle integer negation" $ do
-      parse pExpr "" "-42" `shouldParse` Negation (IntLiteral 42)
+      parse pExpr "" "-42" `shouldParse` Negate (IntLiteral 42)
 
     -- it "should handle float negation" $ do
     --   parse pExpr "" "-42.0" `shouldParse` Negation (FloatLiteral 42.0)
@@ -45,7 +45,7 @@ spec = do
 
   describe "sum" $ do
     it "should handle integer addition" $ do
-      parse pExpr "" "42 + 42" `shouldParse` Sum (IntLiteral 42) (IntLiteral 42)
+      parse pExpr "" "42 + 42" `shouldParse` ABinary Add (IntLiteral 42) (IntLiteral 42)
 
     -- it "should handle float addition" $ do
     --   parse pExpr "" "42.0 + 42.0" `shouldParse` Sum (FloatLiteral 42.0) (FloatLiteral 42.0)
@@ -53,7 +53,7 @@ spec = do
 
   describe "subtact" $ do
     it "should handle integer subtraction" $ do
-      parse pExpr "" "42 - 42" `shouldParse` Subtract (IntLiteral 42) (IntLiteral 42)
+      parse pExpr "" "42 - 42" `shouldParse` ABinary Subtract (IntLiteral 42) (IntLiteral 42)
 
     -- it "should handle float subtraction" $ do
     --   parse pExpr "" "42.0 - 42.0" `shouldParse` Subtract (FloatLiteral 42.0) (FloatLiteral 42.0)
@@ -61,7 +61,7 @@ spec = do
 
   describe "product" $ do
     it "should handle integer multiplication" $ do
-      parse pExpr "" "42 * 42" `shouldParse` Product (IntLiteral 42) (IntLiteral 42)
+      parse pExpr "" "42 * 42" `shouldParse` ABinary Multiply (IntLiteral 42) (IntLiteral 42)
 
     -- it "should handle float multiplication" $ do
     --   parse pExpr "" "42.0 * 42.0" `shouldParse` Product (FloatLiteral 42.0) (FloatLiteral 42.0)
@@ -69,7 +69,17 @@ spec = do
 
   describe "division" $ do
     it "should handle integer division" $ do
-      parse pExpr "" "42 / 42" `shouldParse` Division (IntLiteral 42) (IntLiteral 42)
+      parse pExpr "" "42 / 42" `shouldParse` ABinary Divide (IntLiteral 42) (IntLiteral 42)
 
     -- it "should handle float division" $ do
     --   parse pExpr "" "42.0 / 42.0" `shouldParse` Division (FloatLiteral 42.0) (FloatLiteral 42.0)
+
+
+  describe "modulo" $ do
+    it "should handle modulo remainder" $ do
+      parse pExpr "" "42 % 2" `shouldParse` ABinary Modulo (IntLiteral 42) (IntLiteral 2)
+
+
+  describe "exponent" $ do
+    it "should handle power" $ do
+      parse pExpr "" "42 ^ 2" `shouldParse` ABinary Exponent (IntLiteral 42) (IntLiteral 2)
