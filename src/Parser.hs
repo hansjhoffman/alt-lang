@@ -22,11 +22,17 @@ data Expr
 
 data ABinOp
   = Add
+  -- ^ (+)
   | Divide
+  -- ^ (/)
   | Exponent
+  -- ^ (^)
   | Modulo
+  -- ^ (%)
   | Multiply
+  -- ^ (*)
   | Subtract
+  -- ^ (-)
   deriving (Eq, Show)
 
 
@@ -34,12 +40,41 @@ data ABinOp
 
 data RBinOp
   = EQ
-  | NE
-  | LT
+  -- ^ (==)
   | GT
-  | LTE
+  -- ^ (>)
   | GTE
+  -- ^ (>=)
+  | LT
+  -- ^ (<)
+  | LTE
+  -- ^ (<=)
+  | NE
+  -- ^ (/=)
   deriving (Eq, Show)
+
+
+-- Logical Binary Operators
+
+data LBinOp
+  = And
+  -- ^ and
+  | Or
+  -- ^ or
+  | Not
+  -- ^ not
+  | Xor
+  -- ^ xor
+  deriving (Eq, Show)
+
+
+-- Primative Data Types
+
+-- data Primative
+--   = BoolLiteral Bool
+--   | FloatLiteral Double
+--   | IntLiteral Integer
+--   | StringLiteral String
 
 
 -- Statements
@@ -48,17 +83,6 @@ data RBinOp
 --   = Assign Text AExpr
 --   | If BExpr Stmt Stmt
 --   deriving (Eq, Show)
-
-
--- Symbols
-
-
-parens :: Parser a -> Parser a
-parens = between (symbol "(") (symbol ")")
-
-
-brackets :: Parser a -> Parser a
-brackets = between (symbol "[") (symbol "]")
 
 
 -- Values
@@ -86,7 +110,6 @@ pHexadecimal = IntLiteral <$> hexadecimalLiteral
 
 pString :: Parser Expr
 pString = StringLiteral <$> stringLiteral
-
 
 
 pTerm :: Parser Expr

@@ -17,11 +17,6 @@ blockComment = L.skipBlockComment "{-" "-}"
 
 sc :: Parser ()
 sc = L.space space1 lineComment blockComment
--- sc = L.space (void $ some (char ' ' <|> char '\t')) lineComment blockComment
-
-
--- scn :: Parser ()
--- scn = L.space space1 lineComment blockComment
 
 
 lexeme :: Parser a -> Parser a
@@ -30,6 +25,14 @@ lexeme = L.lexeme sc
 
 symbol :: Text -> Parser Text
 symbol = L.symbol sc
+
+
+parens :: Parser a -> Parser a
+parens = between (symbol "(") (symbol ")")
+
+
+brackets :: Parser a -> Parser a
+brackets = between (symbol "[") (symbol "]")
 
 
 integerLiteral :: Parser Integer

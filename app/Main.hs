@@ -1,6 +1,6 @@
 module Main where
 
-import           Prelude                        ( IO
+import           RIO                            ( IO
                                                 , undefined
                                                 )
 
