@@ -13,10 +13,7 @@ import           Types
 data Expr
   = Negate Expr
   | ABinary ABinOp Expr Expr
-  | BooleanLiteral Bool
-  | IntLiteral Integer
-  | FloatLiteral Double
-  | StringLiteral String
+  | Value Primative
   deriving (Eq, Show)
 
 
@@ -72,11 +69,12 @@ data LBinOp
 
 -- Primative Data Types
 
--- data Primative
---   = BoolLiteral Bool
---   | FloatLiteral Double
---   | IntLiteral Integer
---   | StringLiteral String
+data Primative
+  = BoolLiteral Bool
+  | FloatLiteral Double
+  | IntLiteral Integer
+  | StringLiteral String
+  deriving (Eq, Show)
 
 
 -- Statements
@@ -90,36 +88,43 @@ data LBinOp
 -- Values
 
 
-pFloat :: Parser Expr
-pFloat = FloatLiteral <$> floatLiteral
+pValue :: Parser Expr
+pValue = pString <|> pInteger <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean
+
+
+-- pFloat :: Parser Expr
+-- pFloat = Value . FloatLiteral <$> floatLiteral
 
 
 pInteger :: Parser Expr
-pInteger = IntLiteral <$> integerLiteral
+pInteger = Value . IntLiteral <$> integerLiteral
 
 
 pBinary :: Parser Expr
-pBinary = IntLiteral <$> binaryLiteral
+pBinary = Value . IntLiteral <$> binaryLiteral
 
 
 pOctal :: Parser Expr
-pOctal = IntLiteral <$> octalLiteral
+pOctal = Value . IntLiteral <$> octalLiteral
 
 
 pHexadecimal :: Parser Expr
-pHexadecimal = IntLiteral <$> hexadecimalLiteral
+pHexadecimal = Value . IntLiteral <$> hexadecimalLiteral
 
 
 pString :: Parser Expr
-pString = StringLiteral <$> stringLiteral
+pString = Value . StringLiteral <$> stringLiteral
 
 
 pBoolean :: Parser Expr
-pBoolean = BooleanLiteral <$> (string "True" $> True <|> string "False" $> False)
+pBoolean = Value . BoolLiteral <$> (string "True" $> True <|> string "False" $> False)
+
+
+-- Main
 
 
 pTerm :: Parser Expr
-pTerm = choice [parens pExpr, pString, pBoolean, pInteger, pBinary, pHexadecimal, pOctal, pFloat]
+pTerm = choice [parens pExpr, pValue]
 
 
 pExpr :: Parser Expr
