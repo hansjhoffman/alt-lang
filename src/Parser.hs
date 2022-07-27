@@ -6,12 +6,14 @@ import           Control.Monad.Combinators.Expr ( Operator(..)
 import           Lexer
 import           RIO
 import           Text.Megaparsec
+import           Text.Megaparsec.Char           ( string )
 import           Types
 
 
 data Expr
   = Negate Expr
   | ABinary ABinOp Expr Expr
+  | BooleanLiteral Bool
   | IntLiteral Integer
   | FloatLiteral Double
   | StringLiteral String
@@ -112,8 +114,12 @@ pString :: Parser Expr
 pString = StringLiteral <$> stringLiteral
 
 
+pBoolean :: Parser Expr
+pBoolean = BooleanLiteral <$> (string "True" $> True <|> string "False" $> False)
+
+
 pTerm :: Parser Expr
-pTerm = choice [parens pExpr, pString, pInteger, pBinary, pHexadecimal, pOctal, pFloat]
+pTerm = choice [parens pExpr, pString, pBoolean, pInteger, pBinary, pHexadecimal, pOctal, pFloat]
 
 
 pExpr :: Parser Expr

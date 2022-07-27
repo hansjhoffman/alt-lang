@@ -83,3 +83,11 @@ spec = do
   describe "exponent" $ do
     it "should handle power" $ do
       parse pExpr "" "42 ^ 2" `shouldParse` ABinary Exponent (IntLiteral 42) (IntLiteral 2)
+
+
+  describe "boolean" $ do
+    it "should handle True" $ do
+      parse pExpr "" "True" `shouldParse` BooleanLiteral True
+
+    it "should handle False" $ do
+      parse pExpr "" "False" `shouldParse` BooleanLiteral False
