@@ -10,8 +10,10 @@ import           Types
 
 
 data Expr
-  = Negate Expr
-  | ABinary ABinOp Expr Expr
+  = ABinary ABinOp Expr Expr
+  | LBinary LBinOp Expr Expr
+  | Negate Expr
+  | Not Expr
   | RBinary RBinOp Expr Expr
   | Value Primative
   deriving (Eq, Show)
@@ -57,13 +59,11 @@ data RBinOp
 
 data LBinOp
   = And
-  -- ^ and
+  -- ^ (and)
   | Or
-  -- ^ or
-  | Not
-  -- ^ not
+  -- ^ (or)
   | Xor
-  -- ^ xor
+  -- ^ (xor)
   deriving (Eq, Show)
 
 
@@ -133,7 +133,7 @@ pExpr = makeExprParser pTerm operatorTable
 
 operatorTable :: [[Operator Parser Expr]]
 operatorTable =
-  [ [Prefix (Negate <$ symbol "-"), Prefix (id <$ symbol "+")]
+  [ [Prefix (Negate <$ symbol "-"), Prefix (id <$ symbol "+"), Prefix (Not <$ symbol "not")]
   , [ InfixL (RBinary Equal <$ symbol "==")
     , InfixL (RBinary NotEqual <$ symbol "/=")
     , InfixL (RBinary LessThanEqual <$ symbol "<=")
@@ -145,6 +145,10 @@ operatorTable =
   , [ InfixL (ABinary Multiply <$ symbol "*")
     , InfixL (ABinary Divide <$ symbol "/")
     , InfixL (ABinary Modulo <$ symbol "%")
+    ]
+  , [ InfixL (LBinary And <$ symbol "and")
+    , InfixL (LBinary Or <$ symbol "or")
+    , InfixL (LBinary Xor <$ symbol "xor")
     ]
   , [InfixL (ABinary Add <$ symbol "+"), InfixL (ABinary Subtract <$ symbol "-")]
   ]

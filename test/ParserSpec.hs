@@ -123,3 +123,20 @@ spec = do
     it "should handle '<'" $ do
       parse pExpr "" "2 < 3"
         `shouldParse` RBinary LessThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
+
+
+  describe "logical" $ do
+    it "should handle 'and'" $ do
+      parse pExpr "" "True and False"
+        `shouldParse` LBinary And (Value (BoolLiteral True)) (Value (BoolLiteral False))
+
+    it "should handle 'or'" $ do
+      parse pExpr "" "True or False"
+        `shouldParse` LBinary Or (Value (BoolLiteral True)) (Value (BoolLiteral False))
+
+    it "should handle 'xor'" $ do
+      parse pExpr "" "True xor False"
+        `shouldParse` LBinary Xor (Value (BoolLiteral True)) (Value (BoolLiteral False))
+
+    it "should handle 'not'" $ do
+      parse pExpr "" "not True" `shouldParse` Not (Value (BoolLiteral True))
