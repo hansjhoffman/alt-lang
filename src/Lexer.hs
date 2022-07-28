@@ -57,3 +57,7 @@ octalLiteral = char '0' >> char 'o' >> L.octal
 
 hexadecimalLiteral :: Parser Integer
 hexadecimalLiteral = char '0' >> char 'x' >> L.hexadecimal
+
+
+boolLiteral :: Parser Bool
+boolLiteral = lexeme (string "True" $> True <|> string "False" $> False)

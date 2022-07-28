@@ -6,7 +6,6 @@ import           Control.Monad.Combinators.Expr ( Operator(..)
 import           Lexer
 import           RIO
 import           Text.Megaparsec
-import           Text.Megaparsec.Char           ( string )
 import           Types
 
 
@@ -118,7 +117,7 @@ pString = Value . StringLiteral <$> stringLiteral
 
 
 pBoolean :: Parser Expr
-pBoolean = Value . BoolLiteral <$> (string "True" $> True <|> string "False" $> False)
+pBoolean = Value . BoolLiteral <$> boolLiteral
 
 
 -- Main
