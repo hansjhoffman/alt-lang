@@ -13,6 +13,7 @@ import           Types
 data Expr
   = Negate Expr
   | ABinary ABinOp Expr Expr
+  | RBinary RBinOp Expr Expr
   | Value Primative
   deriving (Eq, Show)
 
@@ -38,17 +39,17 @@ data ABinOp
 -- Relational Binary Operators
 
 data RBinOp
-  = EQ
+  = Equal
   -- ^ (==)
-  | GT
+  | GreaterThan
   -- ^ (>)
-  | GTE
+  | GreaterThanEqual
   -- ^ (>=)
-  | LT
+  | LessThan
   -- ^ (<)
-  | LTE
+  | LessThanEqual
   -- ^ (<=)
-  | NE
+  | NotEqual
   -- ^ (/=)
   deriving (Eq, Show)
 
@@ -92,8 +93,8 @@ pValue :: Parser Expr
 pValue = pString <|> pInteger <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean
 
 
--- pFloat :: Parser Expr
--- pFloat = Value . FloatLiteral <$> floatLiteral
+pFloat :: Parser Expr
+pFloat = Value . FloatLiteral <$> floatLiteral
 
 
 pInteger :: Parser Expr
@@ -134,6 +135,13 @@ pExpr = makeExprParser pTerm operatorTable
 operatorTable :: [[Operator Parser Expr]]
 operatorTable =
   [ [Prefix (Negate <$ symbol "-"), Prefix (id <$ symbol "+")]
+  , [ InfixL (RBinary Equal <$ symbol "==")
+    , InfixL (RBinary NotEqual <$ symbol "/=")
+    , InfixL (RBinary LessThanEqual <$ symbol "<=")
+    , InfixL (RBinary GreaterThanEqual <$ symbol ">=")
+    , InfixL (RBinary LessThan <$ symbol "<")
+    , InfixL (RBinary GreaterThan <$ symbol ">")
+    ]
   , [InfixL (ABinary Exponent <$ symbol "^")]
   , [ InfixL (ABinary Multiply <$ symbol "*")
     , InfixL (ABinary Divide <$ symbol "/")

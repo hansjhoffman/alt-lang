@@ -97,3 +97,29 @@ spec = do
 
     it "should handle False" $ do
       parse pExpr "" "False" `shouldParse` Value (BoolLiteral False)
+
+
+  describe "relation" $ do
+    it "should handle '=='" $ do
+      parse pExpr "" "2 == 3"
+        `shouldParse` RBinary Equal (Value (IntLiteral 2)) (Value (IntLiteral 3))
+
+    it "should handle '/='" $ do
+      parse pExpr "" "2 /= 3"
+        `shouldParse` RBinary NotEqual (Value (IntLiteral 2)) (Value (IntLiteral 3))
+
+    it "should handle '<='" $ do
+      parse pExpr "" "2 <= 3"
+        `shouldParse` RBinary LessThanEqual (Value (IntLiteral 2)) (Value (IntLiteral 3))
+
+    it "should handle '>='" $ do
+      parse pExpr "" "2 >= 3"
+        `shouldParse` RBinary GreaterThanEqual (Value (IntLiteral 2)) (Value (IntLiteral 3))
+
+    it "should handle '>'" $ do
+      parse pExpr "" "2 > 3"
+        `shouldParse` RBinary GreaterThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
+
+    it "should handle '<'" $ do
+      parse pExpr "" "2 < 3"
+        `shouldParse` RBinary LessThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
