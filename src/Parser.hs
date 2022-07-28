@@ -80,9 +80,27 @@ data Primative
 -- Statements
 
 -- data Stmt
---   = Assign Text AExpr
---   | If BExpr Stmt Stmt
+--   = IfStmt Expr Stmt Stmt
+--   | LetBlock Expr
 --   deriving (Eq, Show)
+
+
+-- pLetStmt :: Parser Stmt
+-- pLetStmt = undefined
+
+
+-- pIfStmt :: Parser Stmt
+-- pIfStmt =
+--     IfStmt
+--         <$> (symbol "if" *> pExpr)
+--         <*> (symbol "then")
+--         <*> (many pStmt)
+--         <*> (symbol "else")
+--         <*> (many pStmt)
+
+
+-- pStmt :: Parser Stmt
+-- pStmt = pIfStmt <|> pLetStmt
 
 
 -- Values
