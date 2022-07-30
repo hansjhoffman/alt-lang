@@ -10,37 +10,30 @@ import           Text.Megaparsec
 
 
 data Expr
-  = ABinary ABinOp Expr Expr
-  | LBinary LBinOp Expr Expr
-  | Negate Expr
-  | Not Expr
-  | RBinary RBinOp Expr Expr
+  = Binary BinaryOperator Expr Expr
+  | Unary UnaryOperator Expr
   | Value Literal
   deriving (Eq, Show)
 
 
--- Arithmetic Binary Operators
+data UnaryOperator
+  = Negate
+  | Not
+  deriving (Eq, Show)
 
-data ABinOp
+
+data BinaryOperator
   = Add
   -- ^ (+)
   | Divide
   -- ^ (/)
-  | Exponent
-  -- ^ (^)
-  | Modulus
-  -- ^ (%)
   | Multiply
   -- ^ (*)
+  | Sequence
+  -- ^ (..)
   | Subtract
   -- ^ (-)
-  deriving (Eq, Show)
-
-
--- Relational Binary Operators
-
-data RBinOp
-  = EqualTo
+  | EqualTo
   -- ^ (==)
   | GreaterThan
   -- ^ (>)
@@ -52,13 +45,7 @@ data RBinOp
   -- ^ (<=)
   | NotEqualTo
   -- ^ (/=)
-  deriving (Eq, Show)
-
-
--- Logical Binary Operators
-
-data LBinOp
-  = And
+  | And
   -- ^ (and)
   | Or
   -- ^ (or)
@@ -83,37 +70,11 @@ data Literal
   deriving (Eq, Show)
 
 
--- Statements
-
--- data Stmt
---   = IfStmt Expr Stmt Stmt
---   | LetBlock Expr
---   deriving (Eq, Show)
-
-
--- pLetStmt :: Parser Stmt
--- pLetStmt = undefined
-
-
--- pIfStmt :: Parser Stmt
--- pIfStmt =
---     IfStmt
---         <$> (symbol "if" *> pExpr)
---         <*> (symbol "then")
---         <*> (many pStmt)
---         <*> (symbol "else")
---         <*> (many pStmt)
-
-
--- pStmt :: Parser Stmt
--- pStmt = pIfStmt <|> pLetStmt
-
-
 -- Values
 
 
-pValue :: Parser Expr
-pValue = pString <|> pInteger <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean
+pLiteral :: Parser Expr
+pLiteral = pString <|> pInteger <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean <|> pChar
 
 
 pFloat :: Parser Expr
@@ -152,7 +113,7 @@ pBoolean = Value . BooleanLiteral <$> booleanLiteral
 
 
 pTerm :: Parser Expr
-pTerm = choice [parens pExpr, pValue]
+pTerm = choice [parens pExpr, pLiteral]
 
 
 pExpr :: Parser Expr
@@ -161,22 +122,25 @@ pExpr = makeExprParser pTerm operatorTable
 
 operatorTable :: [[Operator Parser Expr]]
 operatorTable =
-  [ [Prefix (Negate <$ symbol "-"), Prefix (id <$ symbol "+"), Prefix (Not <$ symbol "not")]
-  , [ InfixL (RBinary EqualTo <$ symbol "==")
-    , InfixL (RBinary NotEqualTo <$ symbol "/=")
-    , InfixL (RBinary LessThanOrEqualTo <$ symbol "<=")
-    , InfixL (RBinary GreaterThanOrEqualTo <$ symbol ">=")
-    , InfixL (RBinary LessThan <$ symbol "<")
-    , InfixL (RBinary GreaterThan <$ symbol ">")
+  [ [ Prefix (Unary Negate <$ symbol "-")
+    , Prefix (id <$ symbol "+")
+    , Prefix (Unary Not <$ symbol "not")
     ]
-  , [InfixL (ABinary Exponent <$ symbol "^")]
-  , [ InfixL (ABinary Multiply <$ symbol "*")
-    , InfixL (ABinary Divide <$ symbol "/")
-    , InfixL (ABinary Modulus <$ symbol "%")
+  , [ InfixL (Binary EqualTo <$ symbol "==")
+    , InfixL (Binary NotEqualTo <$ symbol "/=")
+    , InfixL (Binary LessThanOrEqualTo <$ symbol "<=")
+    , InfixL (Binary GreaterThanOrEqualTo <$ symbol ">=")
+    , InfixL (Binary LessThan <$ symbol "<")
+    , InfixL (Binary GreaterThan <$ symbol ">")
     ]
-  , [ InfixL (LBinary And <$ symbol "and")
-    , InfixL (LBinary Or <$ symbol "or")
-    , InfixL (LBinary Xor <$ symbol "xor")
+  , [ InfixL (Binary Add <$ symbol "+")
+    , InfixL (Binary Subtract <$ symbol "-")
+    , InfixL (Binary Multiply <$ symbol "*")
+    , InfixL (Binary Divide <$ symbol "/")
+    , InfixL (Binary Sequence <$ symbol "..")
     ]
-  , [InfixL (ABinary Add <$ symbol "+"), InfixL (ABinary Subtract <$ symbol "-")]
+  , [ InfixL (Binary And <$ symbol "and")
+    , InfixL (Binary Or <$ symbol "or")
+    , InfixL (Binary Xor <$ symbol "xor")
+    ]
   ]

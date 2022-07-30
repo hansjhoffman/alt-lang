@@ -40,60 +40,54 @@ spec = do
       parse pChar "" "x" `shouldParse` Value (CharLiteral 'x')
 
 
-  describe "negation" $ do
+  describe "negate operator" $ do
     it "should handle integer negation" $ do
-      parse pExpr "" "-42" `shouldParse` Negate (Value (IntLiteral 42))
+      parse pExpr "" "-42" `shouldParse` Unary Negate (Value (IntLiteral 42))
 
     -- it "should handle float negation" $ do
     --   parse pExpr "" "-42.0" `shouldParse` Negation (FloatLiteral 42.0)
 
 
-  describe "sum" $ do
+  describe "add operator" $ do
     it "should handle integer addition" $ do
       parse pExpr "" "42 + 42"
-        `shouldParse` ABinary Add (Value (IntLiteral 42)) (Value (IntLiteral 42))
+        `shouldParse` Binary Add (Value (IntLiteral 42)) (Value (IntLiteral 42))
 
     -- it "should handle float addition" $ do
     --   parse pExpr "" "42.0 + 42.0" `shouldParse` Sum (FloatLiteral 42.0) (FloatLiteral 42.0)
 
 
-  describe "subtact" $ do
+  describe "subtact operator" $ do
     it "should handle integer subtraction" $ do
       parse pExpr "" "42 - 42"
-        `shouldParse` ABinary Subtract (Value (IntLiteral 42)) (Value (IntLiteral 42))
+        `shouldParse` Binary Subtract (Value (IntLiteral 42)) (Value (IntLiteral 42))
 
     -- it "should handle float subtraction" $ do
     --   parse pExpr "" "42.0 - 42.0" `shouldParse` Subtract (FloatLiteral 42.0) (FloatLiteral 42.0)
 
 
-  describe "product" $ do
+  describe "product operator" $ do
     it "should handle integer multiplication" $ do
       parse pExpr "" "42 * 42"
-        `shouldParse` ABinary Multiply (Value (IntLiteral 42)) (Value (IntLiteral 42))
+        `shouldParse` Binary Multiply (Value (IntLiteral 42)) (Value (IntLiteral 42))
 
     -- it "should handle float multiplication" $ do
     --   parse pExpr "" "42.0 * 42.0" `shouldParse` Product (FloatLiteral 42.0) (FloatLiteral 42.0)
 
 
-  describe "division" $ do
+  describe "division operator" $ do
     it "should handle integer division" $ do
       parse pExpr "" "42 / 42"
-        `shouldParse` ABinary Divide (Value (IntLiteral 42)) (Value (IntLiteral 42))
+        `shouldParse` Binary Divide (Value (IntLiteral 42)) (Value (IntLiteral 42))
 
     -- it "should handle float division" $ do
     --   parse pExpr "" "42.0 / 42.0" `shouldParse` Division (FloatLiteral 42.0) (FloatLiteral 42.0)
 
 
-  describe "modulo" $ do
-    it "should handle modulo remainder" $ do
-      parse pExpr "" "42 % 2"
-        `shouldParse` ABinary Modulus (Value (IntLiteral 42)) (Value (IntLiteral 2))
-
-
-  describe "exponent" $ do
+  describe "sequence/range opeator" $ do
     it "should handle power" $ do
-      parse pExpr "" "42 ^ 2"
-        `shouldParse` ABinary Exponent (Value (IntLiteral 42)) (Value (IntLiteral 2))
+      parse pExpr "" "1..10"
+        `shouldParse` Binary Sequence (Value (IntLiteral 1)) (Value (IntLiteral 10))
 
 
   describe "boolean" $ do
@@ -107,41 +101,41 @@ spec = do
   describe "relation" $ do
     it "should handle '=='" $ do
       parse pExpr "" "2 == 3"
-        `shouldParse` RBinary EqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` Binary EqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '/='" $ do
       parse pExpr "" "2 /= 3"
-        `shouldParse` RBinary NotEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` Binary NotEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '<='" $ do
       parse pExpr "" "2 <= 3"
-        `shouldParse` RBinary LessThanOrEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` Binary LessThanOrEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '>='" $ do
       parse pExpr "" "2 >= 3"
-        `shouldParse` RBinary GreaterThanOrEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` Binary GreaterThanOrEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '>'" $ do
       parse pExpr "" "2 > 3"
-        `shouldParse` RBinary GreaterThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` Binary GreaterThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '<'" $ do
       parse pExpr "" "2 < 3"
-        `shouldParse` RBinary LessThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` Binary LessThan (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
 
   describe "logical" $ do
     it "should handle 'and'" $ do
       parse pExpr "" "True and False"
-        `shouldParse` LBinary And (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
+        `shouldParse` Binary And (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
 
     it "should handle 'or'" $ do
       parse pExpr "" "True or False"
-        `shouldParse` LBinary Or (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
+        `shouldParse` Binary Or (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
 
     it "should handle 'xor'" $ do
       parse pExpr "" "True xor False"
-        `shouldParse` LBinary Xor (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
+        `shouldParse` Binary Xor (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
 
     it "should handle 'not'" $ do
-      parse pExpr "" "not True" `shouldParse` Not (Value (BooleanLiteral True))
+      parse pExpr "" "not True" `shouldParse` Unary Not (Value (BooleanLiteral True))
