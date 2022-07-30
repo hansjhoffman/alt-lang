@@ -47,6 +47,10 @@ stringLiteral :: Parser String
 stringLiteral = char '"' *> manyTill L.charLiteral (char '"')
 
 
+charLiteral :: Parser Char
+charLiteral = lexeme L.charLiteral
+
+
 binaryLiteral :: Parser Integer
 binaryLiteral = char '0' >> char 'b' >> L.binary
 

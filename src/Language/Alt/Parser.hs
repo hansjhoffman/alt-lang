@@ -140,6 +140,10 @@ pString :: Parser Expr
 pString = Value . StringLiteral <$> stringLiteral
 
 
+pChar :: Parser Expr
+pChar = Value . CharLiteral <$> charLiteral
+
+
 pBoolean :: Parser Expr
 pBoolean = Value . BooleanLiteral <$> booleanLiteral
 

@@ -35,6 +35,11 @@ spec = do
       parse pString "" "\"foo bar\"" `shouldParse` Value (StringLiteral "foo bar")
 
 
+  describe "character literal" $ do
+    it "should handle valid character" $ do
+      parse pChar "" "x" `shouldParse` Value (CharLiteral 'x')
+
+
   describe "negation" $ do
     it "should handle integer negation" $ do
       parse pExpr "" "-42" `shouldParse` Negate (Value (IntLiteral 42))
