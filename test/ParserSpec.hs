@@ -82,7 +82,7 @@ spec = do
   describe "modulo" $ do
     it "should handle modulo remainder" $ do
       parse pExpr "" "42 % 2"
-        `shouldParse` ABinary Modulo (Value (IntLiteral 42)) (Value (IntLiteral 2))
+        `shouldParse` ABinary Modulus (Value (IntLiteral 42)) (Value (IntLiteral 2))
 
 
   describe "exponent" $ do
@@ -93,28 +93,28 @@ spec = do
 
   describe "boolean" $ do
     it "should handle True" $ do
-      parse pExpr "" "True" `shouldParse` Value (BoolLiteral True)
+      parse pExpr "" "True" `shouldParse` Value (BooleanLiteral True)
 
     it "should handle False" $ do
-      parse pExpr "" "False" `shouldParse` Value (BoolLiteral False)
+      parse pExpr "" "False" `shouldParse` Value (BooleanLiteral False)
 
 
   describe "relation" $ do
     it "should handle '=='" $ do
       parse pExpr "" "2 == 3"
-        `shouldParse` RBinary Equal (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` RBinary EqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '/='" $ do
       parse pExpr "" "2 /= 3"
-        `shouldParse` RBinary NotEqual (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` RBinary NotEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '<='" $ do
       parse pExpr "" "2 <= 3"
-        `shouldParse` RBinary LessThanEqual (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` RBinary LessThanOrEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '>='" $ do
       parse pExpr "" "2 >= 3"
-        `shouldParse` RBinary GreaterThanEqual (Value (IntLiteral 2)) (Value (IntLiteral 3))
+        `shouldParse` RBinary GreaterThanOrEqualTo (Value (IntLiteral 2)) (Value (IntLiteral 3))
 
     it "should handle '>'" $ do
       parse pExpr "" "2 > 3"
@@ -128,15 +128,15 @@ spec = do
   describe "logical" $ do
     it "should handle 'and'" $ do
       parse pExpr "" "True and False"
-        `shouldParse` LBinary And (Value (BoolLiteral True)) (Value (BoolLiteral False))
+        `shouldParse` LBinary And (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
 
     it "should handle 'or'" $ do
       parse pExpr "" "True or False"
-        `shouldParse` LBinary Or (Value (BoolLiteral True)) (Value (BoolLiteral False))
+        `shouldParse` LBinary Or (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
 
     it "should handle 'xor'" $ do
       parse pExpr "" "True xor False"
-        `shouldParse` LBinary Xor (Value (BoolLiteral True)) (Value (BoolLiteral False))
+        `shouldParse` LBinary Xor (Value (BooleanLiteral True)) (Value (BooleanLiteral False))
 
     it "should handle 'not'" $ do
-      parse pExpr "" "not True" `shouldParse` Not (Value (BoolLiteral True))
+      parse pExpr "" "not True" `shouldParse` Not (Value (BooleanLiteral True))

@@ -59,5 +59,5 @@ hexadecimalLiteral :: Parser Integer
 hexadecimalLiteral = char '0' >> char 'x' >> L.hexadecimal
 
 
-boolLiteral :: Parser Bool
-boolLiteral = lexeme (string "True" $> True <|> string "False" $> False)
+booleanLiteral :: Parser Bool
+booleanLiteral = lexeme (string "True" $> True <|> string "False" $> False)

@@ -15,7 +15,7 @@ data Expr
   | Negate Expr
   | Not Expr
   | RBinary RBinOp Expr Expr
-  | Value Primative
+  | Value Literal
   deriving (Eq, Show)
 
 
@@ -28,7 +28,7 @@ data ABinOp
   -- ^ (/)
   | Exponent
   -- ^ (^)
-  | Modulo
+  | Modulus
   -- ^ (%)
   | Multiply
   -- ^ (*)
@@ -40,17 +40,17 @@ data ABinOp
 -- Relational Binary Operators
 
 data RBinOp
-  = Equal
+  = EqualTo
   -- ^ (==)
   | GreaterThan
   -- ^ (>)
-  | GreaterThanEqual
+  | GreaterThanOrEqualTo
   -- ^ (>=)
   | LessThan
   -- ^ (<)
-  | LessThanEqual
+  | LessThanOrEqualTo
   -- ^ (<=)
-  | NotEqual
+  | NotEqualTo
   -- ^ (/=)
   deriving (Eq, Show)
 
@@ -67,13 +67,19 @@ data LBinOp
   deriving (Eq, Show)
 
 
--- Primative Data Types
+-- Literal Types
 
-data Primative
-  = BoolLiteral Bool
+data Literal
+  = BooleanLiteral Bool
+  -- ^ A boolean literal
+  | CharLiteral Char
+  -- ^ A character literal
   | FloatLiteral Double
+  -- ^ A float literal
   | IntLiteral Integer
+  -- ^ An integer literal
   | StringLiteral String
+  -- ^ A string literal
   deriving (Eq, Show)
 
 
@@ -135,7 +141,7 @@ pString = Value . StringLiteral <$> stringLiteral
 
 
 pBoolean :: Parser Expr
-pBoolean = Value . BoolLiteral <$> boolLiteral
+pBoolean = Value . BooleanLiteral <$> booleanLiteral
 
 
 -- Main
@@ -152,17 +158,17 @@ pExpr = makeExprParser pTerm operatorTable
 operatorTable :: [[Operator Parser Expr]]
 operatorTable =
   [ [Prefix (Negate <$ symbol "-"), Prefix (id <$ symbol "+"), Prefix (Not <$ symbol "not")]
-  , [ InfixL (RBinary Equal <$ symbol "==")
-    , InfixL (RBinary NotEqual <$ symbol "/=")
-    , InfixL (RBinary LessThanEqual <$ symbol "<=")
-    , InfixL (RBinary GreaterThanEqual <$ symbol ">=")
+  , [ InfixL (RBinary EqualTo <$ symbol "==")
+    , InfixL (RBinary NotEqualTo <$ symbol "/=")
+    , InfixL (RBinary LessThanOrEqualTo <$ symbol "<=")
+    , InfixL (RBinary GreaterThanOrEqualTo <$ symbol ">=")
     , InfixL (RBinary LessThan <$ symbol "<")
     , InfixL (RBinary GreaterThan <$ symbol ">")
     ]
   , [InfixL (ABinary Exponent <$ symbol "^")]
   , [ InfixL (ABinary Multiply <$ symbol "*")
     , InfixL (ABinary Divide <$ symbol "/")
-    , InfixL (ABinary Modulo <$ symbol "%")
+    , InfixL (ABinary Modulus <$ symbol "%")
     ]
   , [ InfixL (LBinary And <$ symbol "and")
     , InfixL (LBinary Or <$ symbol "or")
