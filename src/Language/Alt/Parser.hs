@@ -49,52 +49,39 @@ data BinaryOperator
   -- ^ (and)
   | Or
   -- ^ (or)
-  | Xor
-  -- ^ (xor)
   deriving (Eq, Show)
 
-
--- Literal Types
 
 data Literal
   = BooleanLiteral Bool
   -- ^ A boolean literal
   | CharLiteral Char
   -- ^ A character literal
-  | FloatLiteral Double
-  -- ^ A float literal
-  | IntLiteral Integer
-  -- ^ An integer literal
+  | NumericLiteral Double
+  -- ^ An integer/float literal
   | StringLiteral String
   -- ^ A string literal
   deriving (Eq, Show)
 
 
--- Values
-
-
 pLiteral :: Parser Expr
-pLiteral = pString <|> pInteger <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean <|> pChar
+pLiteral = pString <|> pNumeric <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean <|> pChar
 
 
-pFloat :: Parser Expr
-pFloat = Value . FloatLiteral <$> floatLiteral
-
-
-pInteger :: Parser Expr
-pInteger = Value . IntLiteral <$> integerLiteral
+pNumeric :: Parser Expr
+pNumeric = Value . NumericLiteral <$> numericLiteral
 
 
 pBinary :: Parser Expr
-pBinary = Value . IntLiteral <$> binaryLiteral
+pBinary = Value . NumericLiteral <$> binaryLiteral
 
 
 pOctal :: Parser Expr
-pOctal = Value . IntLiteral <$> octalLiteral
+pOctal = Value . NumericLiteral <$> octalLiteral
 
 
 pHexadecimal :: Parser Expr
-pHexadecimal = Value . IntLiteral <$> hexadecimalLiteral
+pHexadecimal = Value . NumericLiteral <$> hexadecimalLiteral
 
 
 pString :: Parser Expr
@@ -122,25 +109,20 @@ pExpr = makeExprParser pTerm operatorTable
 
 operatorTable :: [[Operator Parser Expr]]
 operatorTable =
-  [ [ Prefix (Unary Negate <$ symbol "-")
-    , Prefix (id <$ symbol "+")
-    , Prefix (Unary Not <$ symbol "not")
-    ]
-  , [ InfixL (Binary EqualTo <$ symbol "==")
-    , InfixL (Binary NotEqualTo <$ symbol "/=")
-    , InfixL (Binary LessThanOrEqualTo <$ symbol "<=")
-    , InfixL (Binary GreaterThanOrEqualTo <$ symbol ">=")
-    , InfixL (Binary LessThan <$ symbol "<")
-    , InfixL (Binary GreaterThan <$ symbol ">")
-    ]
-  , [ InfixL (Binary Add <$ symbol "+")
-    , InfixL (Binary Subtract <$ symbol "-")
-    , InfixL (Binary Multiply <$ symbol "*")
+  [ [Prefix (Unary Negate <$ symbol "-"), Prefix (id <$ symbol "+")]
+  , [ InfixL (Binary Multiply <$ symbol "*")
     , InfixL (Binary Divide <$ symbol "/")
+    , InfixL (Binary Add <$ symbol "+")
+    , InfixL (Binary Subtract <$ symbol "-")
     , InfixL (Binary Sequence <$ symbol "..")
     ]
-  , [ InfixL (Binary And <$ symbol "and")
-    , InfixL (Binary Or <$ symbol "or")
-    , InfixL (Binary Xor <$ symbol "xor")
+  , [Prefix (Unary Not <$ symbol "not")]
+  , [ InfixL (Binary LessThanOrEqualTo <$ symbol "<=")
+    , InfixL (Binary LessThan <$ symbol "<")
+    , InfixL (Binary GreaterThanOrEqualTo <$ symbol ">=")
+    , InfixL (Binary GreaterThan <$ symbol ">")
+    , InfixL (Binary EqualTo <$ symbol "==")
+    , InfixL (Binary NotEqualTo <$ symbol "!=")
     ]
+  , [InfixL (Binary And <$ symbol "and"), InfixL (Binary Or <$ symbol "or")]
   ]

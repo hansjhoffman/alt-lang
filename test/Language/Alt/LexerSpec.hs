@@ -13,12 +13,12 @@ spec :: Spec
 spec = do
   describe "integer literal" $ do
     it "should handle valid integer" $ do
-      parse integerLiteral "" "42" `shouldParse` 42
+      parse numericLiteral "" "42" `shouldParse` 42
 
 
   describe "float literal" $ do
     it "should handle valid float" $ do
-      parse floatLiteral "" "42.0" `shouldParse` 42.0
+      parse numericLiteral "" "42.0" `shouldParse` 42.0
 
 
   describe "string literal" $ do

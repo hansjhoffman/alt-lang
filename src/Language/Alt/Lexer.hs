@@ -1,7 +1,7 @@
 module Language.Alt.Lexer where
 
 import           Language.Alt.Types
-import           RIO
+import           RIO                     hiding ( try )
 import           Text.Megaparsec
 import           Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer    as L
@@ -35,12 +35,8 @@ brackets :: Parser a -> Parser a
 brackets = between (symbol "[") (symbol "]")
 
 
-integerLiteral :: Parser Integer
-integerLiteral = lexeme L.decimal
-
-
-floatLiteral :: Parser Double
-floatLiteral = lexeme L.float
+numericLiteral :: Parser Double
+numericLiteral = lexeme $ try L.float <|> L.decimal
 
 
 stringLiteral :: Parser String
@@ -51,17 +47,17 @@ charLiteral :: Parser Char
 charLiteral = lexeme L.charLiteral
 
 
-binaryLiteral :: Parser Integer
+binaryLiteral :: Parser Double
 binaryLiteral = char '0' >> char 'b' >> L.binary
 
 
-octalLiteral :: Parser Integer
+octalLiteral :: Parser Double
 octalLiteral = char '0' >> char 'o' >> L.octal
 
 
-hexadecimalLiteral :: Parser Integer
+hexadecimalLiteral :: Parser Double
 hexadecimalLiteral = char '0' >> char 'x' >> L.hexadecimal
 
 
 booleanLiteral :: Parser Bool
-booleanLiteral = lexeme (string "True" $> True <|> string "False" $> False)
+booleanLiteral = lexeme $ string "True" $> True <|> string "False" $> False

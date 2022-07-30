@@ -7,7 +7,7 @@ The safety of Haskell, the simplicity of Elm, and tooling/web libraries like Eli
 ```
 stack ghci
 > import Text.Megaparsec
-> import Parser
+> import RIO
 > parseTest (parser <* eof) "value"
 ```
 
