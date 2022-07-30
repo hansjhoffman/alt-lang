@@ -1,12 +1,12 @@
-module Parser where
+module Language.Alt.Parser where
 
 import           Control.Monad.Combinators.Expr ( Operator(..)
                                                 , makeExprParser
                                                 )
-import           Lexer
+import           Language.Alt.Lexer
+import           Language.Alt.Types
 import           RIO
 import           Text.Megaparsec
-import           Types
 
 
 data Expr

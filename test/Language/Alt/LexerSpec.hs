@@ -1,8 +1,8 @@
-module LexerSpec
+module Language.Alt.LexerSpec
   ( spec
   ) where
 
-import           Lexer
+import           Language.Alt.Lexer
 import           RIO
 import           Test.Hspec
 import           Test.Hspec.Megaparsec

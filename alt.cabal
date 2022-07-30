@@ -25,9 +25,10 @@ source-repository head
 
 library
   exposed-modules:
-      Lexer
-      Parser
-      Types
+      Language.Alt
+      Language.Alt.Lexer
+      Language.Alt.Parser
+      Language.Alt.Types
   other-modules:
       Paths_alt
   hs-source-dirs:
@@ -133,8 +134,8 @@ test-suite alt-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      LexerSpec
-      ParserSpec
+      Language.Alt.LexerSpec
+      Language.Alt.ParserSpec
       Paths_alt
   hs-source-dirs:
       test
