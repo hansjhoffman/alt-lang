@@ -3,111 +3,49 @@ module Language.Alt.Parser where
 import           Control.Monad.Combinators.Expr ( Operator(..)
                                                 , makeExprParser
                                                 )
+import           Language.Alt.AST
 import           Language.Alt.Lexer
 import           Language.Alt.Types
 import           RIO
 import           Text.Megaparsec
 
 
-data Expr
-  = Binary BinaryOperator Expr Expr
-  | Unary UnaryOperator Expr
-  | Value Literal
-  deriving (Eq, Show)
-
-
-data UnaryOperator
-  = Negate
-  | Not
-  deriving (Eq, Show)
-
-
-data BinaryOperator
-  = Add
-  -- ^ (+)
-  | Divide
-  -- ^ (/)
-  | Multiply
-  -- ^ (*)
-  | Sequence
-  -- ^ (..)
-  | Subtract
-  -- ^ (-)
-  | EqualTo
-  -- ^ (==)
-  | GreaterThan
-  -- ^ (>)
-  | GreaterThanOrEqualTo
-  -- ^ (>=)
-  | LessThan
-  -- ^ (<)
-  | LessThanOrEqualTo
-  -- ^ (<=)
-  | NotEqualTo
-  -- ^ (/=)
-  | And
-  -- ^ (and)
-  | Or
-  -- ^ (or)
-  deriving (Eq, Show)
-
-
-data Literal
-  = BooleanLiteral Bool
-  -- ^ A boolean literal
-  | CharLiteral Char
-  -- ^ A character literal
-  | NumericLiteral Double
-  -- ^ An integer/float literal
-  | StringLiteral String
-  -- ^ A string literal
-  deriving (Eq, Show)
-
-
-pLiteral :: Parser Expr
-pLiteral = pString <|> pNumeric <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean <|> pChar
-
-
-pNumeric :: Parser Expr
+pNumeric :: Parser AST
 pNumeric = Value . NumericLiteral <$> numericLiteral
 
 
-pBinary :: Parser Expr
+pBinary :: Parser AST
 pBinary = Value . NumericLiteral <$> binaryLiteral
 
 
-pOctal :: Parser Expr
+pOctal :: Parser AST
 pOctal = Value . NumericLiteral <$> octalLiteral
 
 
-pHexadecimal :: Parser Expr
+pHexadecimal :: Parser AST
 pHexadecimal = Value . NumericLiteral <$> hexadecimalLiteral
 
 
-pString :: Parser Expr
+pString :: Parser AST
 pString = Value . StringLiteral <$> stringLiteral
 
 
-pChar :: Parser Expr
+pChar :: Parser AST
 pChar = Value . CharLiteral <$> charLiteral
 
 
-pBoolean :: Parser Expr
+pBoolean :: Parser AST
 pBoolean = Value . BooleanLiteral <$> booleanLiteral
+
+
+pLiteral :: Parser AST
+pLiteral = pString <|> pNumeric <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean <|> pChar
 
 
 -- Main
 
 
-pTerm :: Parser Expr
-pTerm = choice [parens pExpr, pLiteral]
-
-
-pExpr :: Parser Expr
-pExpr = makeExprParser pTerm operatorTable
-
-
-operatorTable :: [[Operator Parser Expr]]
+operatorTable :: [[Operator Parser AST]]
 operatorTable =
   [ [Prefix (Unary Negate <$ symbol "-"), Prefix (id <$ symbol "+")]
   , [ InfixL (Binary Multiply <$ symbol "*")
@@ -126,3 +64,11 @@ operatorTable =
     ]
   , [InfixL (Binary And <$ symbol "and"), InfixL (Binary Or <$ symbol "or")]
   ]
+
+
+pTerm :: Parser AST
+pTerm = choice [parens pExpr, pLiteral]
+
+
+pExpr :: Parser AST
+pExpr = makeExprParser pTerm operatorTable

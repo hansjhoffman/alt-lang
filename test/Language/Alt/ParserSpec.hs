@@ -2,6 +2,7 @@ module Language.Alt.ParserSpec
   ( spec
   ) where
 
+import           Language.Alt.AST
 import           Language.Alt.Parser
 import           RIO
 import           Test.Hspec
@@ -11,33 +12,33 @@ import           Text.Megaparsec                ( parse )
 
 spec :: Spec
 spec = do
-  describe "integer literal" $ do
-    it "should handle valid integer" $ do
+  describe "literals" $ do
+    it "should handle integer" $ do
       parse pNumeric "" "42" `shouldParse` Value (NumericLiteral 42)
 
-    it "should handle valid binary" $ do
-      parse pBinary "" "0b101010111100000100100011" `shouldParse` Value (NumericLiteral 11256099)
-
-    it "should handle valid hexadecimal" $ do
-      parse pHexadecimal "" "0xABC123" `shouldParse` Value (NumericLiteral 11256099)
-
-    it "should handle valid octal" $ do
-      parse pOctal "" "0o52740443" `shouldParse` Value (NumericLiteral 11256099)
-
-
-  describe "float literal" $ do
-    it "should handle valid float" $ do
+    it "should handle float" $ do
       parse pNumeric "" "42.0" `shouldParse` Value (NumericLiteral 42.0)
 
+    it "should handle binary" $ do
+      parse pBinary "" "0b101010111100000100100011" `shouldParse` Value (NumericLiteral 11256099)
 
-  describe "string literal" $ do
-    it "should handle valid string" $ do
+    it "should handle hexadecimal" $ do
+      parse pHexadecimal "" "0xABC123" `shouldParse` Value (NumericLiteral 11256099)
+
+    it "should handle octal" $ do
+      parse pOctal "" "0o52740443" `shouldParse` Value (NumericLiteral 11256099)
+
+    it "should handle string" $ do
       parse pString "" "\"foo bar\"" `shouldParse` Value (StringLiteral "foo bar")
 
-
-  describe "character literal" $ do
-    it "should handle valid character" $ do
+    it "should handle character" $ do
       parse pChar "" "x" `shouldParse` Value (CharLiteral 'x')
+
+    it "should handle True" $ do
+      parse pExpr "" "True" `shouldParse` Value (BooleanLiteral True)
+
+    it "should handle False" $ do
+      parse pExpr "" "False" `shouldParse` Value (BooleanLiteral False)
 
 
   describe "negate operator" $ do
@@ -48,7 +49,7 @@ spec = do
       parse pExpr "" "-42.0" `shouldParse` Unary Negate (Value (NumericLiteral 42.0))
 
 
-  describe "add operator" $ do
+  describe "arithmetic operators" $ do
     it "should handle integer addition" $ do
       parse pExpr "" "42 + 42"
         `shouldParse` Binary Add (Value (NumericLiteral 42)) (Value (NumericLiteral 42))
@@ -57,8 +58,6 @@ spec = do
       parse pExpr "" "42.0 + 42.1"
         `shouldParse` Binary Add (Value (NumericLiteral 42.0)) (Value (NumericLiteral 42.1))
 
-
-  describe "subtact operator" $ do
     it "should handle integer subtraction" $ do
       parse pExpr "" "42 - 42"
         `shouldParse` Binary Subtract (Value (NumericLiteral 42)) (Value (NumericLiteral 42))
@@ -67,8 +66,6 @@ spec = do
       parse pExpr "" "42.1 - 42.0"
         `shouldParse` Binary Subtract (Value (NumericLiteral 42.1)) (Value (NumericLiteral 42.0))
 
-
-  describe "product operator" $ do
     it "should handle integer multiplication" $ do
       parse pExpr "" "42 * 42"
         `shouldParse` Binary Multiply (Value (NumericLiteral 42)) (Value (NumericLiteral 42))
@@ -77,8 +74,6 @@ spec = do
       parse pExpr "" "42.0 * 42.0"
         `shouldParse` Binary Multiply (Value (NumericLiteral 42.0)) (Value (NumericLiteral 42.0))
 
-
-  describe "division operator" $ do
     it "should handle integer division" $ do
       parse pExpr "" "42 / 42"
         `shouldParse` Binary Divide (Value (NumericLiteral 42)) (Value (NumericLiteral 42))
@@ -89,20 +84,12 @@ spec = do
 
 
   describe "sequence/range operator" $ do
-    it "should handle power" $ do
+    it "should handle sequence" $ do
       parse pExpr "" "1..10"
         `shouldParse` Binary Sequence (Value (NumericLiteral 1)) (Value (NumericLiteral 10))
 
 
-  describe "boolean" $ do
-    it "should handle True" $ do
-      parse pExpr "" "True" `shouldParse` Value (BooleanLiteral True)
-
-    it "should handle False" $ do
-      parse pExpr "" "False" `shouldParse` Value (BooleanLiteral False)
-
-
-  describe "relation" $ do
+  describe "relational operators" $ do
     it "should handle '=='" $ do
       parse pExpr "" "2 == 3"
         `shouldParse` Binary EqualTo (Value (NumericLiteral 2)) (Value (NumericLiteral 3))
@@ -131,7 +118,7 @@ spec = do
         `shouldParse` Binary LessThan (Value (NumericLiteral 2)) (Value (NumericLiteral 3))
 
 
-  describe "logical" $ do
+  describe "logical operators" $ do
     it "should handle 'and'" $ do
       parse pExpr "" "True and False"
         `shouldParse` Binary And (Value (BooleanLiteral True)) (Value (BooleanLiteral False))

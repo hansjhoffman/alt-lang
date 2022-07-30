@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Language.Alt
+      Language.Alt.AST
       Language.Alt.Lexer
       Language.Alt.Parser
       Language.Alt.Types
