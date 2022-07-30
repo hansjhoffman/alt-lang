@@ -40,7 +40,7 @@ numericLiteral = lexeme $ try L.float <|> L.decimal
 
 
 stringLiteral :: Parser String
-stringLiteral = char '"' *> manyTill L.charLiteral (char '"')
+stringLiteral = lexeme $ char '"' *> manyTill L.charLiteral (char '"')
 
 
 charLiteral :: Parser Char
@@ -48,15 +48,15 @@ charLiteral = lexeme L.charLiteral
 
 
 binaryLiteral :: Parser Double
-binaryLiteral = char '0' >> char 'b' >> L.binary
+binaryLiteral = lexeme $ char '0' >> char 'b' >> L.binary
 
 
 octalLiteral :: Parser Double
-octalLiteral = char '0' >> char 'o' >> L.octal
+octalLiteral = lexeme $ char '0' >> char 'o' >> L.octal
 
 
 hexadecimalLiteral :: Parser Double
-hexadecimalLiteral = char '0' >> char 'x' >> L.hexadecimal
+hexadecimalLiteral = lexeme $ char '0' >> char 'x' >> L.hexadecimal
 
 
 booleanLiteral :: Parser Bool
