@@ -31,8 +31,8 @@ parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
 
 
-brackets :: Parser a -> Parser a
-brackets = between (symbol "[") (symbol "]")
+squareBrackets :: Parser a -> Parser a
+squareBrackets = between (symbol "[") (symbol "]")
 
 
 numericLiteral :: Parser Double

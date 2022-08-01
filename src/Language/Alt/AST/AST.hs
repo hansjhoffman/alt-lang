@@ -11,31 +11,31 @@ data UnaryOperator
 
 data BinaryOperator
   = Add
-  -- ^ (+)
+  -- ^ `+`
   | Divide
-  -- ^ (/)
+  -- ^ `/`
   | Multiply
-  -- ^ (*)
+  -- ^ `*`
   | Sequence
-  -- ^ (..)
+  -- ^ `..`
   | Subtract
-  -- ^ (-)
+  -- ^ `-`
   | EqualTo
-  -- ^ (==)
+  -- ^ `==`
   | GreaterThan
-  -- ^ (>)
+  -- ^ `>`
   | GreaterThanOrEqualTo
-  -- ^ (>=)
+  -- ^ `>=`
   | LessThan
-  -- ^ (<)
+  -- ^ `<`
   | LessThanOrEqualTo
-  -- ^ (<=)
+  -- ^ `<=`
   | NotEqualTo
-  -- ^ (/=)
+  -- ^ `/=`
   | And
-  -- ^ (and)
+  -- ^ `and`
   | Or
-  -- ^ (or)
+  -- ^ `or`
   deriving (Eq, Show)
 
 
