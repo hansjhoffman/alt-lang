@@ -39,7 +39,7 @@ pBoolean = Value . BooleanLiteral <$> booleanLiteral
 
 
 pLiteral :: Parser AST
-pLiteral = pString <|> pNumeric <|> pBinary <|> pOctal <|> pHexadecimal <|> pBoolean <|> pChar
+pLiteral = choice [pString, pNumeric, pBinary, pOctal, pHexadecimal, pBoolean, pChar]
 
 
 -- Main
