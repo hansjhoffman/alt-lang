@@ -17,3 +17,4 @@ stack ghci
 - https://compilers.iecc.com/crenshaw/
 - https://cronokirby.com/posts/2020/12/haskell-in-haskell-2
 - https://github.com/mrkkrp/megaparsec-site/blob/master/tutorials/parsing-simple-imperative-language.md
+- https://www.stephendiehl.com/llvm/#the-parser

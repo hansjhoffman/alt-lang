@@ -1,4 +1,4 @@
-module Language.Alt.AST where
+module Language.Alt.AST.AST where
 
 import           RIO
 

@@ -1,9 +1,9 @@
-module Language.Alt.ParserSpec
+module Language.Alt.AST.ParserSpec
   ( spec
   ) where
 
-import           Language.Alt.AST
-import           Language.Alt.Parser
+import           Language.Alt.AST.AST
+import           Language.Alt.AST.Parser
 import           RIO
 import           Test.Hspec
 import           Test.Hspec.Megaparsec

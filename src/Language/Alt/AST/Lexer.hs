@@ -1,6 +1,6 @@
-module Language.Alt.Lexer where
+module Language.Alt.AST.Lexer where
 
-import           Language.Alt.Types
+import           Language.Alt.AST.Types
 import           RIO                     hiding ( try )
 import           Text.Megaparsec
 import           Text.Megaparsec.Char

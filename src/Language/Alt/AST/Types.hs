@@ -1,4 +1,4 @@
-module Language.Alt.Types where
+module Language.Alt.AST.Types where
 
 import           Data.Void                      ( Void )
 import           RIO.Text                       ( Text )

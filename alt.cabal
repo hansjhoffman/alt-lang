@@ -26,10 +26,11 @@ source-repository head
 library
   exposed-modules:
       Language.Alt
-      Language.Alt.AST
-      Language.Alt.Lexer
-      Language.Alt.Parser
-      Language.Alt.Types
+      Language.Alt.AST.AST
+      Language.Alt.AST.Lexer
+      Language.Alt.AST.Parser
+      Language.Alt.AST.Types
+      Language.Alt.Linter.Exhaustive
   other-modules:
       Paths_alt
   hs-source-dirs:
@@ -135,8 +136,8 @@ test-suite alt-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Language.Alt.LexerSpec
-      Language.Alt.ParserSpec
+      Language.Alt.AST.LexerSpec
+      Language.Alt.AST.ParserSpec
       Paths_alt
   hs-source-dirs:
       test
