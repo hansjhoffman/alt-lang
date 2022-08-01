@@ -32,3 +32,11 @@ spec = do
 
     it "should handle hexadecimal" $ do
       parse hexadecimalLiteral "" "0xABC123" `shouldParse` 11256099
+
+
+  describe "indentifiers" $ do
+    it "should handle lowerName" $ do
+      parse lowerName "" "fooBar" `shouldParse` "fooBar"
+
+    it "should handle upperName" $ do
+      parse upperName "" "FooBar" `shouldParse` "FooBar"

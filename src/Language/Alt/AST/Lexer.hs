@@ -1,7 +1,9 @@
 module Language.Alt.AST.Lexer where
 
 import           Language.Alt.AST.Types
-import           RIO                     hiding ( try )
+import           RIO                     hiding ( many
+                                                , try
+                                                )
 import           Text.Megaparsec
 import           Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer    as L
@@ -61,3 +63,15 @@ hexadecimalLiteral = lexeme $ char '0' >> char 'x' >> L.hexadecimal
 
 booleanLiteral :: Parser Bool
 booleanLiteral = lexeme $ string "True" $> True <|> string "False" $> False
+
+
+comma :: Parser Text
+comma = lexeme $ symbol ","
+
+
+upperName :: Parser String
+upperName = lexeme $ (:) <$> upperChar <*> many letterChar
+
+
+lowerName :: Parser String
+lowerName = lexeme $ (:) <$> lowerChar <*> many letterChar

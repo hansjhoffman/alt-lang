@@ -31,7 +31,7 @@ data BinaryOperator
   | LessThanOrEqualTo
   -- ^ `<=`
   | NotEqualTo
-  -- ^ `/=`
+  -- ^ `!=`
   | And
   -- ^ `and`
   | Or
